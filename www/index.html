@@ -59,8 +59,10 @@
     
     .logo {
         position: absolute;
-        top: 40px;
-        left: 40px;
+        top: 5.1%;
+        left: 3.2%;
+        width: 16.7%;
+        height: auto;
         z-index: 10;
     }
 
@@ -128,7 +130,7 @@
     #landing-container {
 
         position: absolute;
-        display: table;
+        /* display: table; */
         /*table-layout: fixed;*/
         width: 100%;
         height: 100%;
@@ -148,22 +150,27 @@
     }
 
 
+    #title-container {
+        position: absolute;
+        top: 33.6%;
+        width: 100%;
+        height: 19.2%;
+        text-align: center;
+    }
+    
     #header {
-        font-size: 80pt;
+        font-size: 10vw;
         font-weight: 700;
         text-transform: uppercase;
-        text-align: center;
         letter-spacing: 2pt;
-        vertical-align: middle;
-        margin-top: 0;
-        margin-bottom: 5px;
+        margin: 0;
+        line-height: 1;
     }
     
     #subtitle {
-        font-size: 24pt;
-        text-align: center;
-        margin-top: 10px;
-        margin-bottom: 20px;
+        font-size: 3vw;
+        margin-top: 2vh;
+        margin-bottom: 0;
     }
 
     #error {
@@ -210,11 +217,15 @@
         will-change: transform; /* creates a new paint layer */
         z-index: -40;
     }
-
+    
     #desc {
-        margin-top: 0;
-        margin-bottom: 50px;
+        position: absolute;
+        top: 4.9%;
+        width: 100%;
+        height: 75.6%;
         font-size: 14pt;
+        text-align: center;
+        z-index: 10;
     }
 
     #app {
@@ -223,25 +234,25 @@
         font-size: 12pt;
         letter-spacing: 0.5pt;
         text-align: center;
-        background-color: rgba(0, 0, 0, 0.25);
     }
     .start-button {
-        border: 1px solid white;
-        border-radius: 60px;
+        position: absolute;
+        top: 67.3%;
+        left: 35.9%;
+        width: 28.1%;
+        height: 9.5%;
+        border-radius: 120px;
         background-color: rgba(255, 255, 255, 0.2);
         border: 2px solid rgba(255, 255, 255, 1);
         box-shadow: 0px 4px 15px 0px rgba(61, 61, 61, 0.25);
-        display: block;
-        width: 420px;
-        height: 80px;
-        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2vw;
         text-align: center;
-        vertical-align: middle;
-        margin: 0 auto;
-        padding-top: 15px;
-        margin-bottom: 10px;
         cursor: pointer;
         transition: background-color 0.3s;
+        z-index: 10;
     }
     
     .start-button:hover {
@@ -434,12 +445,15 @@
        
 
         <div class="logo">
-            <img src="/img/home/blue_up_logo.png" alt="Logo" height="60">
+            <img src="/img/home/blue_up_logo.png" alt="Logo" width="100%">
         </div>
+        <!-- <div id="vertical-text">画一条线，找一片海洋，创造你与大海的故事<br>Draw a line, find a coastline, and create your story with the sea.</div> -->
         <div id="app">
             <p id="desc">画一条线，找一片海洋，创造你与大海的故事<br>Draw a line, find a coastline, and create your story with the sea.</p>
-            <p id="header">LINE — UP</p>
-            <p id="subtitle">共绘海岸线</p>
+            <div id="title-container">
+                <p id="header">LINE — UP</p>
+                <p id="subtitle">共绘海岸线</p>
+            </div>
             <a class="start-button" href="javascript:void(0)" id="button-start">开始体验<br>START NOW</a>
             <p id="error"></p>
             <div id="video_container"><div id="video"></div></div>
@@ -462,16 +476,16 @@
         <!-- <a href="javascript:void(0)" id="nav-draw" class="bigger" >Draw</a> | <a href="javascript:void(0)" id="nav-drag" >Drag</a> -->
     </div>
 
-    <div id="privacy-terms">
+    <!-- <div id="privacy-terms">
         <a target="_blank" href="https://www.google.com/policies/privacy/">Privacy</a> &
         <a target="_blank" href="https://www.google.com/policies/terms/">Terms</a>
-    </div>
+    </div> -->
 
-    <a href="javascript:void(0)"><img id="overlay-open" src="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/question-mark@2x.png" width="25"></img></a>
+    <!-- <a href="javascript:void(0)"><img id="overlay-open" src="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/question-mark@2x.png" width="25"></img></a> -->
 
-    <a href="https://www.chromeexperiments.com/" target="ce">
+    <!-- <a href="https://www.chromeexperiments.com/" target="ce">
         <img id="chrome-experiment" src="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/CE_badge@2x.png"></img>
-    </a>
+    </a> -->
 
     <div id="about-overlay">
         <div id="about-overlay-content">

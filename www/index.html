@@ -58,12 +58,21 @@
     }
     
     .logo {
-        position: absolute;
-        top: 5.1%;
-        left: 3.2%;
-        width: 18.5%;
+        width: 30%;
+        max-width: 300px;
+        min-width: 100px;
         height: auto;
         z-index: 10;
+        padding-left: 2vw;
+    }
+    
+    .header-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        margin-bottom: 5vh;
     }
 
     a {
@@ -128,14 +137,15 @@
     }*/
 
     #landing-container {
-
         position: absolute;
-        /* display: table; */
-        /*table-layout: fixed;*/
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
      #nav-draw {
@@ -151,15 +161,14 @@
 
 
     #title-container {
-        position: absolute;
-        top: 33.6%;
+        position: relative;
         width: 100%;
-        /* height: 19.2%; */
         text-align: center;
+        margin-bottom: 5vh;
     }
     
     #header {
-        font-size: 228px;
+        font-size: 12vw;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 2pt;
@@ -168,7 +177,7 @@
     }
     
     #subtitle {
-        font-size: 80px;
+        font-size: 4vw;
         margin-top: 0;
         margin-bottom: 0;
         font-weight: 600;
@@ -220,39 +229,43 @@
     }
     
     #desc {
-        position: absolute;
-        /* top: 1%; */
-        width: 100%;
-        /* height: 75.6%; */
-        font-size: 40px;
+        flex: 1;
+        font-size: 2.2vw;
         text-align: center;
         z-index: 10;
+        padding-right: 10%; /* 与logo宽度相同，保持平衡 */
     }
 
     #app {
-        display: table-cell;
-        vertical-align: middle;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
         font-size: 12pt;
         letter-spacing: 0.5pt;
         text-align: center;
+        padding-bottom: 8vh;
     }
+    
     .btn-cn {
-        font-size: 70px;
+        font-size: 3.5vw;
         display: block;
     }
     
     .btn-en {
-        font-size: 40px;
+        font-size: 2vw;
         display: block;
     }
     
     .start-button {
-        position: absolute;
+        position: relative;
         margin: 0 auto;
-        top: 77.3%;
-        /* left: 35.9%; */
-        width: 38.1%;
-        /* height: 9.5%; */
+        width: 38%;
+        max-width: 500px;
+        min-width: 250px;
+        padding: 1.5vh 0;
         border-radius: 120px;
         background-color: rgba(255, 255, 255, 0.3);
         border: 2px solid rgba(255, 255, 255, 1);
@@ -265,11 +278,6 @@
         cursor: pointer;
         transition: background-color 0.3s;
         z-index: 10;
-
-        left: 0;
-        right: 0;
-        margin-left: auto;
-        margin-right: auto;
     }
     
     .start-button:hover {
@@ -440,14 +448,78 @@
         border: none;
     }
 
-    /* Changes for mobile */
-    @media screen and (max-device-width: 1023px) {
-        #desc {
-            font-size: 11pt;
+    /* 响应式设计 - 平板设备 */
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        #header {
+            font-size: 10vw;
         }
-
+        
+        #subtitle {
+            font-size: 4.5vw;
+        }
+        
+        #desc {
+            font-size: 2.5vw;
+            padding-right: 20%; /* 与logo宽度相同，保持平衡 */
+        }
+        
+        .btn-cn {
+            font-size: 4vw;
+        }
+        
+        .btn-en {
+            font-size: 2.5vw;
+        }
+        
+        .start-button {
+            width: 50%;
+            padding: 1.8vh 0;
+        }
+        
+        .logo {
+            width: 20%;
+        }
+    }
+    
+    /* 响应式设计 - 移动设备 */
+    @media screen and (max-width: 767px) {
+        #header {
+            font-size: 14vw;
+        }
+        
+        #subtitle {
+            font-size: 6vw;
+        }
+        
+        #desc {
+            font-size: 4vw;
+            padding-right: 25%; /* 与logo宽度相同，保持平衡 */
+        }
+        
+        .btn-cn {
+            font-size: 6vw;
+        }
+        
+        .btn-en {
+            font-size: 4vw;
+        }
+        
+        .start-button {
+            width: 70%;
+            padding: 1.5vh 0;
+        }
+        
+        .logo {
+            width: 25%;
+        }
+        
         #about-overlay-content {
-            width: 80%;
+            width: 90%;
+        }
+        
+        /* 在小屏幕上调整header-row的间距 */
+        .header-row {
+            margin-bottom: 3vh;
         }
     }
 
@@ -460,12 +532,13 @@
     <canvas id="bg">Your browser doesn't support canvas</canvas>
     <div id="landing-container">
        
-
-        <div class="logo">
-            <img src="/img/home/blue_up_logo.png" alt="Logo" width="100%">
-        </div>
         <div id="app">
-            <p id="desc">画一条线，找一片海洋，创造你与大海的故事<br>Draw a line, find a coastline, and create your story with the sea.</p>
+            <div class="header-row">
+                <div class="logo">
+                    <img src="/img/home/blue_up_logo.png" alt="Logo" width="100%">
+                </div>
+                <p id="desc">画一条线，找一片海洋，创造你与大海的故事<br>Draw a line, find a coastline, and create your story with the sea.</p>
+            </div>
             <div id="title-container">
                 <p id="header">LINE — UP</p>
                 <p id="subtitle">共绘海岸线</p>

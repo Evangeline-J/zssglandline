@@ -239,11 +239,12 @@
     #desc {
         position: absolute;
         top: 4.9%; /* 105/2136 = 4.9% */
-        right: 3.2%; /* 与logo左侧对称 */
+        left: 50%; /* 水平居中 */
+        transform: translateX(-50%); /* 精确居中 */
         width: 50.5%; /* 1615/3200 = 50.5% */
         font-family: 'PingFang SC', sans-serif;
         font-weight: 400;
-        font-size: 1.25vw; /* 40/3200 = 1.25% */
+        font-size: 1.5vw; /* 40/3200 = 1.25% */
         line-height: 100%;
         letter-spacing: 0.15em; /* 15% */
         text-align: center;
@@ -475,7 +476,8 @@
         
         #desc {
             font-size: 1vw; /* 稍微缩小 */
-            right: 2%;
+            left: 50%;
+            transform: translateX(-50%);
             width: 45%;
         }
         
@@ -516,7 +518,8 @@
         
         #desc {
             top: 3%;
-            right: 2%;
+            left: 50%;
+            transform: translateX(-50%);
             width: 65%;
             font-size: 2.5vw;
         }

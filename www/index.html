@@ -855,8 +855,29 @@
     var canvas = document.getElementById('bg');
     var context = canvas.getContext('2d');
     imageObj.onload = function() {
+        // 初始绘制图像到Canvas
+        var canvas = document.getElementById('bg');
+        var context = canvas.getContext('2d');
         
-        //context.drawImage(imageObj, 0, 0);
+        // 确保Canvas尺寸正确
+        if (context.canvas.width !== window.innerWidth ||
+            context.canvas.height !== window.innerHeight) {
+            context.canvas.width = window.innerWidth;
+            context.canvas.height = window.innerHeight;
+        }
+        
+        // 计算初始绘制参数
+        var scalew = context.canvas.width / imageObj.width;
+        var scaleh = context.canvas.height / imageObj.height;
+        var maxScale = Math.max(scalew, scaleh);
+        
+        var w = maxScale * imageObj.width * 1.25; // 稍微放大以覆盖整个Canvas
+        var h = maxScale * imageObj.height * 1.25;
+        var midX = context.canvas.width / 2;
+        var midY = context.canvas.height / 2;
+        
+        // 绘制图像
+        context.drawImage(imageObj, -w/2 + midX, -h/2 + midY, w, h);
     };
     imageObj.src = "/img/landing/" + filteredList[bgIndex] + ".jpg";
     // document.getElementById('app').style.backgroundImage = bgFile;
@@ -1067,55 +1088,67 @@
         
         var canvas = document.getElementById('bg');
         
-
         // if the BG hasn't faded out
         if (canvas.style.display !== 'none'){
-
             // if the apps or about page aren't on screen
             if (document.getElementById('about-overlay').style.display === 'none' &&
                 document.getElementById('draw-container').style.display === 'none' &&
                 document.getElementById('drag-container').style.display === 'none'
                 ){
-
-                var context = canvas.getContext('2d');
-                // adjust canvas size if need be (is )
-                // if (context.canvas.width !== window.innerWidth ||
-                //     context.canvas.height !== window.innerHeight){
-                //      //console.log("resize");
-                //      context.canvas.width  = window.innerWidth;
-                //      context.canvas.height = window.innerHeight;
-                // }
-                var scalew =  context.canvas.width / imageObj.width;
-                var scaleh = context.canvas.height / imageObj.height ;
-                var maxScale = Math.max(scalew, scaleh);
-
-               
-                var midX = context.canvas.width * (1.0 - (xPos/100));
-                var midY = context.canvas.height * (1.0 - (yPos/100));;
-
-                //console.log("midY " + midY  +  " " + midY/(context.canvas.height*0.5));
-
-                var yscale = 1.0 + Math.abs(1.0 - midY/(context.canvas.height*0.5));
-                var xscale = 1.0 + Math.abs(1.0 - midX/(context.canvas.width*0.5));
-                var scale = Math.max(Math.max(yscale, xscale), 1.25);
-                var w = maxScale * imageObj.width * scale;
-                var h = maxScale * imageObj.height * scale;
                 
-                alpha = 0.9 * alpha + 0.1 * 1.0;
-
-                if (alpha < 0.99){
-                    context.fillStyle="black";
-                    context.clearRect(0, 0, canvas.width, canvas.height);
-                    context.globalAlpha = alpha;
-                    context.drawImage(imageObj, -w/2 + midX, -h/2+ midY,  w,h);
-                } else {
-                    context.globalAlpha = 1.0;
-                    context.drawImage(imageObj, -w/2 + midX, -h/2+ midY,  w,h);
+                var context = canvas.getContext('2d');
+                
+                // 确保Canvas尺寸正确
+                if (context.canvas.width !== window.innerWidth ||
+                    context.canvas.height !== window.innerHeight){
+                    context.canvas.width = window.innerWidth;
+                    context.canvas.height = window.innerHeight;
                 }
-               
-                //console.log(xPos + " " + yPos);
+                
+                // 检查图像是否已加载
+                if (imageObj.complete && imageObj.naturalWidth !== 0) {
+                    var scalew = context.canvas.width / imageObj.width;
+                    var scaleh = context.canvas.height / imageObj.height;
+                    var maxScale = Math.max(scalew, scaleh);
+                   
+                    var midX = context.canvas.width * (1.0 - (xPos/100));
+                    var midY = context.canvas.height * (1.0 - (yPos/100));
+                    
+                    var yscale = 1.0 + Math.abs(1.0 - midY/(context.canvas.height*0.5));
+                    var xscale = 1.0 + Math.abs(1.0 - midX/(context.canvas.width*0.5));
+                    var scale = Math.max(Math.max(yscale, xscale), 1.25);
+                    var w = maxScale * imageObj.width * scale;
+                    var h = maxScale * imageObj.height * scale;
+                    
+                    alpha = 0.9 * alpha + 0.1 * 1.0;
+                    
+                    // 清除Canvas并绘制图像
+                    context.fillStyle = "black";
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    if (alpha < 0.99){
+                        context.globalAlpha = alpha;
+                    } else {
+                        context.globalAlpha = 1.0;
+                    }
+                    
+                    // 强制绘制图像
+                    try {
+                        context.drawImage(imageObj, -w/2 + midX, -h/2 + midY, w, h);
+                    } catch(e) {
+                        console.error("Error drawing image:", e);
+                        // 尝试使用备用方法绘制
+                        var fallbackScale = 1.25;
+                        var fw = context.canvas.width * fallbackScale;
+                        var fh = context.canvas.height * fallbackScale;
+                        var fmidX = context.canvas.width / 2;
+                        var fmidY = context.canvas.height / 2;
+                        context.drawImage(imageObj, -fw/2 + fmidX, -fh/2 + fmidY, fw, fh);
+                    }
+                } else {
+                    console.log("Image not fully loaded yet");
+                }
             }
-            
         }
 
         window.requestAnimationFrame(animate);
@@ -1123,7 +1156,6 @@
     }
 
     function updateBackgroundSize() {
-
         // twitter ios fix
         // http://stackoverflow.com/questions/27379581/web-page-not-getting-100-height-in-twitter-app-on-ios-8
         document.querySelector("html").style.height = window.innerHeight + "px" 
@@ -1131,32 +1163,28 @@
         var canvas = document.getElementById('bg');       
         var context = canvas.getContext('2d');
 
-
-
+        // 确保Canvas尺寸正确
         if (context.canvas.width !== window.innerWidth ||
             context.canvas.height !== window.innerHeight){
-             //console.log("resize");
-             context.canvas.width  = window.innerWidth;
+             context.canvas.width = window.innerWidth;
              context.canvas.height = window.innerHeight;
         }
         
-        if (typeof(imageObj) !== 'undefined'){
-            if (imageObj.width !== 'undefined'){
+        // 如果图像已加载，重新绘制
+        if (typeof(imageObj) !== 'undefined' && imageObj.complete && imageObj.naturalWidth !== 0){
+            var scalew = context.canvas.width / imageObj.width;
+            var scaleh = context.canvas.height / imageObj.height;
+            var maxScale = Math.max(scalew, scaleh);
 
-                var scalew =  context.canvas.width / imageObj.width;
-                var scaleh = context.canvas.height / imageObj.height ;
-                var maxScale = Math.max(scalew, scaleh);
-
-                var w = maxScale * imageObj.width * 1.07;
-                var h = maxScale * imageObj.height * 1.07;
-                var midX = context.canvas.width * (1.0 - (xPos/100));
-                var midY = context.canvas.height * (1.0 - (yPos/100));;
-                
-                context.fillStyle="black";
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                //context.globalAlpha = 0.4;
-                //context.drawImage(imageObj, -w/2 + midX, -h/2+ midY,  w,h);
-            }
+            var w = maxScale * imageObj.width * 1.25; // 增加比例确保覆盖
+            var h = maxScale * imageObj.height * 1.25;
+            var midX = context.canvas.width / 2;
+            var midY = context.canvas.height / 2;
+            
+            context.fillStyle = "black";
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.globalAlpha = 1.0;
+            context.drawImage(imageObj, -w/2 + midX, -h/2 + midY, w, h);
         }
 
       

@@ -1,3 +1,7 @@
+const LOCAL_FULL  = '/img/full/';
+const LOCAL_THUMB = '/img/thumb/';
+const LOCAL_BLUR  = '/img/blurred/';
+
 window.mobilecheck = function() {
     var check = false;
     (function(a) {
@@ -6,6 +10,10 @@ window.mobilecheck = function() {
     return check;
 };
 
+// —— 以下为标注模式支持 ——
+// 如果 URL 带 ?annotate=1 则开启标注，否则正常绘制查找
+const annotationMode = window.location.search.includes('annotate=1');
+let annotationPath = [];   // 用于记录本次标注的坐标（一维数组格式：[x1, y1, x2, y2, ...]）
 
 
 /*
@@ -533,6 +541,17 @@ function readTextFile(file, callback) {
 
 // Update DOM elements with new data
 function updateMetadata(data) {
+    // 添加安全检查，确保data存在
+    if (!data) {
+        console.error('元数据不存在:', data);
+        // 设置默认值
+        document.getElementById('info-link').innerHTML = "未找到元数据";
+        document.getElementById('info-link').href = "#";
+        document.getElementById('info-attribution').innerText = "";
+        return;
+    }
+    
+    // 使用空字符串作为默认值
     var line1 = data['line-1'] || '';
     var line2 = data['line-2'] || '';
     var attribution = data['attribution'] || '';
@@ -542,7 +561,10 @@ function updateMetadata(data) {
     document.getElementById('info-link').href = url;
     document.getElementById('info-attribution').innerText = attribution;
 
-    ga('send', 'event', 'Draw', 'draw', data['line-1'] + ' ' + data['line-2']);
+    // 添加安全检查，确保ga函数存在
+    if (typeof ga === 'function') {
+        ga('send', 'event', 'Draw', 'draw', data['line-1'] + ' ' + data['line-2']);
+    }
 }
 
 
@@ -554,7 +576,7 @@ var polylineCount = [];
 
 function loadNextTree() {
 
-    readTextFile('https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/draw/data/' + vpTreeToLoad + '.json', loadVPTree);
+    readTextFile('/data/' + '0.json', loadVPTree);
 }
 
 Array.prototype.append = function(array) {
@@ -610,10 +632,10 @@ function parseLoadVPTree() {
         polylineCount.push(polylinePoints.length);
         vpTreeString = eval('(' + jsonData["vpTree"] + ')');
         vptrees.push(VPTreeFactory.load(polylinesTemp, dist, vpTreeString));
-        vpTreeToLoad++;
-        if (vpTreeToLoad < 5) {
-            window.setTimeout(loadNextTree, 10000);
-        }
+        //vpTreeToLoad++;
+        //if (vpTreeToLoad < 1) {
+        //    window.setTimeout(loadNextTree, 10000);
+        //}
     }
 
 }
@@ -629,7 +651,7 @@ function loadVPTree(code, data) {
 }
 
 var vpTreeToLoad = 0;
-readTextFile('https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/draw/data/' + vpTreeToLoad + '.json', loadVPTree);
+readTextFile('/data/' + '0.json', loadVPTree);
 
 //----------------------------------------------------------
 
@@ -639,10 +661,10 @@ readTextFile('https://storage.googleapis.com/navigator-media-usa/media/connected
 // from 0 - 1521 instead of using the id as the filename
 var metadata = {};
 var metadataIDList = [];
-readTextFile('https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/draw/metadata-id-list.json', function(code, data) {
+readTextFile('metadata-id-list.json', function(code, data) {
     metadataIDList = JSON.parse(data);
 });
-readTextFile('https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/draw/metadata-converted.json', function(code, data) {
+readTextFile('metadata-converted.json', function(code, data) {
     metadata = JSON.parse(data);
 });
 
@@ -727,7 +749,7 @@ var Gui = function() {
     this.cutThreshold = 0.1;
     this.cutPct = 0.06;
 
-    this.loadFromCloud = true;
+    this.loadFromCloud = false;
 
     // this.imageResolution = 2;
 };
@@ -937,6 +959,21 @@ var stage = new PIXI.Stage(0xFFFFFF, true);
 stage.interactive = true;
 stage.hitArea = new PIXI.Rectangle(0, 0, dimensions.width, dimensions.height);
 
+// —— 标注模式下预加载图片 ——  
+if (annotationMode) {
+    const id = getUrlParameter('id');
+    // 从本地图库/img/full中选取照片
+    const imgUrl = `/img/full/${id}.jpg`;
+    // 创建并添加精灵
+    const bgTexture = PIXI.Texture.fromImage(imgUrl);
+    const bgSprite  = new PIXI.Sprite(bgTexture);
+    // 将图片缩放至全屏（如需保持纵横比，可自行调整）
+    bgSprite.width  = renderer.view.width;
+    bgSprite.height = renderer.view.height;
+    // 把它放在最底层
+    stage.addChildAt(bgSprite, 0);
+  }
+  
 
 //var brt = new PIXI.BaseRenderTexture(w, h, PIXI.SCALE_MODES.LINEAR, 1);
 var renderTexture = new PIXI.RenderTexture(renderer, dimensions.width, dimensions.height);
@@ -991,6 +1028,24 @@ var touchID;
 var firstTouch = true;
 stage.mousedown = stage.touchstart = function(moveData) {
 
+    if (annotationMode) {
+        annotationPath = [];
+        // 强制进入绘制状态以便记录坐标
+        bAmDrawing = true;
+      }
+      // 原有的初始化逻辑继续执行…
+      if (!annotationMode) {
+        // 仅在非标注模式下保留旧行为
+        /* 原来的清空 pts、设置 touchID、linePulse 等 */
+      }
+      // 如果标注模式，只需记录起点
+      if (annotationMode) {
+        const x = moveData.data.global.x;
+        const y = moveData.data.global.y;
+        annotationPath.push(x, y);
+        return;  // 结束后续逻辑
+      }
+      
     // Remove the instruction animation on first touch
     if (firstTouch) {
         firstTouch = false;
@@ -1031,7 +1086,19 @@ stage.mousedown = stage.touchstart = function(moveData) {
 
 stage.mousemove = stage.touchmove = function(moveData) {
 
-
+    if (annotationMode && bAmDrawing) {
+        const x = moveData.data.global.x;
+        const y = moveData.data.global.y;
+        annotationPath.push(x, y);
+        // 可视化：直接用原有 drawing 绘制线段
+        drawing.lineStyle(myGui.lineWidth, myGui.lineColor, 1.0);
+        if (annotationPath.length === 2) {
+          drawing.moveTo(x, y);
+        } else {
+          drawing.lineTo(x, y);
+        }
+        return;  // 中断后续匹配逻辑
+      }
 
     if (bAmDrawing === true) {
 
@@ -1228,6 +1295,102 @@ function getBestMatch(ptsToTest) {
 
 stage.mouseup = stage.mouseupoutside = stage.touchend = stage.touchendoutside = function(moveData) {
 
+if (annotationMode && bAmDrawing) {
+    bAmDrawing = false;
+    
+    // 归一化处理：将点重采样为60个点
+    let normalizedPath = [];
+    
+    // 只有当点数超过2个时才进行归一化处理
+    if (annotationPath.length >= 4) {
+      // 分离x和y坐标
+      const xPts = [];
+      const yPts = [];
+      for (let i = 0; i < annotationPath.length / 2; i++) {
+        xPts[i] = annotationPath[i * 2];
+        yPts[i] = annotationPath[i * 2 + 1];
+      }
+      
+      // 使用Smooth函数创建平滑插值函数
+      const xSmooth = Smooth(xPts);
+      const ySmooth = Smooth(yPts);
+      
+      // 均匀采样60个点
+      for (let i = 0; i < 60; i++) {
+        const pct = i / 59.0;
+        const newX = xSmooth(pct * (xPts.length - 1));
+        const newY = ySmooth(pct * (yPts.length - 1));
+        normalizedPath.push(newX, newY);
+      }
+    } else {
+      // 如果点数太少，直接使用原始点
+      normalizedPath = annotationPath.slice();
+    }
+    
+    // 计算包围所有点的最小圆
+    const pathPoints = [];
+    for (let i = 0; i < normalizedPath.length; i += 2) {
+      pathPoints.push({
+        x: normalizedPath[i],
+        y: normalizedPath[i + 1]
+      });
+    }
+    const enclosingCircle = makeCircle(pathPoints);
+    
+    // 坐标归一化：将坐标缩放到-250到250之间
+    const scaleFactor = 250.0 / enclosingCircle.r;
+    const scaledCoords = [];
+    
+    for (let i = 0; i < normalizedPath.length; i += 2) {
+      // 将坐标系原点移到圆心，然后缩放
+      const scaledX = (normalizedPath[i] - enclosingCircle.x) * scaleFactor;
+      const scaledY = (normalizedPath[i + 1] - enclosingCircle.y) * scaleFactor;
+      scaledCoords.push(Math.round(scaledX), Math.round(scaledY));
+    }
+    
+    // 转换坐标为相对坐标系（用于显示）
+    const centerX = renderer.view.width / 2;
+    const centerY = renderer.view.height / 2;
+    const transformedCoords = [];
+    
+    for (let i = 0; i < normalizedPath.length; i += 2) {
+      const x = normalizedPath[i];
+      const y = normalizedPath[i + 1];
+      
+      // 计算相对于中心的偏移
+      const relX = Math.round(x - centerX);
+      const relY = Math.round(centerY - y); // 翻转Y轴，使上方为正
+      
+      transformedCoords.push(relX, relY);
+    }
+    
+    // 创建包含归一化坐标和缩放因子的数据对象
+    const annotationData = {
+      coords: scaledCoords,
+      scaleFactor: scaleFactor,
+      circle: {
+        x: enclosingCircle.x,
+        y: enclosingCircle.y,
+        r: enclosingCircle.r
+      },
+      originalCoords: transformedCoords
+    };
+    
+    // 在控制台打印信息
+    console.log('ANNOTATION for ID=' + getUrlParameter('id') + ':', JSON.stringify(annotationData));
+    console.log('原始点数:', annotationPath.length/2, '归一化后点数:', normalizedPath.length/2);
+    console.log('缩放因子:', scaleFactor);
+    
+    // 触发下载 JSON 文件
+    const blob = new Blob([JSON.stringify(annotationData)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = getUrlParameter('id') + '.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    
+    return;  // 阻断后续匹配与动画逻辑
+}
 
     if (moveData.data.identifier !== undefined) {
         if (touchID !== moveData.data.identifier) {
@@ -1254,7 +1417,7 @@ stage.mouseup = stage.mouseupoutside = stage.touchend = stage.touchendoutside = 
     var ptsCopy = pts.slice(0);
     var d = 1.0;
 
-    while (d > myGui.cutThreshold && countMatching < myGui.numMaxCuts) {
+while (d > myGui.cutThreshold && countMatching < myGui.numMaxCuts) {
         //console.log(ptsCopy);
         match = getBestMatch(ptsCopy);
         d = match.result[0].d;
@@ -1270,7 +1433,81 @@ stage.mouseup = stage.mouseupoutside = stage.touchend = stage.touchendoutside = 
 
     }
 
+    // 确保match和result存在
+    if (!match || !match.result || !match.result[0]) {
+        console.log("匹配失败，未找到结果");
+        return;
+    }
+    
     results = match.result;
+    
+    // 创建调试信息对象
+    var debugInfo = {
+        resultIndex: results[0].i,
+        distance: results[0].d
+    };
+    
+    // 安全地获取其他信息
+    try {
+        if (infoobj && infoobj[results[0].i]) {
+            debugInfo.infoObj = infoobj[results[0].i];
+            debugInfo.imageId = infoobj[results[0].i][0];
+            
+            if (metadataIDList && metadataIDList[infoobj[results[0].i][0]]) {
+                debugInfo.metadataId = metadataIDList[infoobj[results[0].i][0]];
+            } else {
+                debugInfo.metadataId = "未找到";
+            }
+        } else {
+            debugInfo.infoObj = "未找到";
+            debugInfo.imageId = "未找到";
+            debugInfo.metadataId = "未找到";
+        }
+    } catch (e) {
+        console.error("获取匹配信息时出错:", e);
+        debugInfo.error = e.message;
+    }
+    
+    // 输出到控制台
+    console.log("匹配结果:", debugInfo);
+    
+    // 在页面上显示匹配结果
+    try {
+        var debugDiv = document.getElementById('debug-output');
+        if (!debugDiv) {
+            debugDiv = document.createElement('div');
+            debugDiv.id = 'debug-output';
+            debugDiv.style.position = 'fixed';
+            debugDiv.style.top = '10px';
+            debugDiv.style.left = '10px';
+            debugDiv.style.backgroundColor = 'rgba(0,0,0,0.7)';
+            debugDiv.style.color = 'white';
+            debugDiv.style.padding = '10px';
+            debugDiv.style.zIndex = '1000';
+            debugDiv.style.fontSize = '14px';
+            debugDiv.style.fontFamily = 'monospace';
+            document.body.appendChild(debugDiv);
+        }
+        
+        var html = '匹配索引: ' + debugInfo.resultIndex + 
+                   '<br>距离值: ' + debugInfo.distance.toFixed(4);
+        
+        if (typeof debugInfo.imageId !== 'undefined') {
+            html += '<br>图片ID: ' + debugInfo.imageId;
+        }
+        
+        if (typeof debugInfo.metadataId !== 'undefined') {
+            html += '<br>元数据ID: ' + debugInfo.metadataId;
+        }
+        
+        if (debugInfo.error) {
+            html += '<br><span style="color:red">错误: ' + debugInfo.error + '</span>';
+        }
+        
+        debugDiv.innerHTML = html;
+    } catch (e) {
+        console.error("显示调试信息时出错:", e);
+    }
     var ptsResampled = match.ptsResampled;
 
     var ptsScaled = ptsResampled.slice();
@@ -1324,13 +1561,16 @@ stage.mouseup = stage.mouseupoutside = stage.touchend = stage.touchendoutside = 
     var random = Math.floor(Math.random() * 1000);
 
     // Create a new Texture and Sprite from the matched image
-    var url = 'https://storage.googleapis.com/navigator-media-usa/media/draw/v1/full/';
+    //var url = 'https://storage.googleapis.com/navigator-media-usa/media/draw/v1/full/';
+    var url;
+
+    //myGui.loadFromCloud=false;
 
     if (isMobile) {
         if (myGui.loadFromCloud)
             url = 'https://storage.googleapis.com/navigator-media-usa/media/draw/v3/900/';
         else
-            url = '/';
+            url = LOCAL_THUMB;
 
         resolutionScale = 1800 / 900;
     } else {
@@ -1339,7 +1579,7 @@ stage.mouseup = stage.mouseupoutside = stage.touchend = stage.touchendoutside = 
         if (myGui.loadFromCloud)
             url = 'https://storage.googleapis.com/navigator-media-usa/media/draw/v3/1260/';
         else
-            url = '/';
+           url  = LOCAL_FULL;
 
         resolutionScale = 1800 / 1260;
     }
@@ -1349,7 +1589,22 @@ stage.mouseup = stage.mouseupoutside = stage.touchend = stage.touchendoutside = 
 
     //console.log("loading num : " + infoobj[results[0].i][0]);
 
-    var texture = PIXI.Texture.fromImage(url + '' + infoobj[results[0].i][0] + '.jpg');
+    // 添加时间戳避免缓存
+    var timestamp = new Date().getTime();
+    var imgPath = url + '' + infoobj[results[0].i][0] + '.jpg?v=' + timestamp;
+    console.log("加载图片:", imgPath);
+    
+    var texture = PIXI.Texture.fromImage(imgPath);
+    
+    // 添加图片加载事件监听
+    texture.baseTexture.on('loaded', function() {
+        console.log('图片加载成功:', imgPath);
+    });
+    
+    texture.baseTexture.on('error', function() {
+        console.error('图片加载失败:', imgPath);
+    });
+    
     var sprite = new PIXI.Sprite(texture);
     sprite.alpha = 0;
 
@@ -1394,8 +1649,10 @@ stage.mouseup = stage.mouseupoutside = stage.touchend = stage.touchendoutside = 
     // Update background image
     PIXI.loader.reset();
     //https://storage.googleapis.com/navigator-media-usa/media/draw/v3/blurredImages/2.jpg
-    url = 'https://storage.googleapis.com/navigator-media-usa/media/draw/v3/';
-    var bg = new PIXI.Sprite.fromImage(url + 'blurredImages/' + infoobj[results[0].i][0] + '.jpg');
+    //url = 'https://storage.googleapis.com/navigator-media-usa/media/draw/v3/';
+    //var bg = new PIXI.Sprite.fromImage(url + 'blurredImages/' + infoobj[results[0].i][0] + '.jpg');
+    url = LOCAL_BLUR;
+    var bg = new PIXI.Sprite.fromImage(url  + infoobj[results[0].i][0] + '.jpg');
     bg.alpha = 0;
 
     // fill bg
@@ -1738,8 +1995,8 @@ function animate() {
         }
 
         var infoElem = document.getElementById('info');
-        if (Math.abs(metadataTargetOpacity - infoElem.style.opacity) > .01) {
-            infoElem.style.opacity = Utils.lerp(infoElem.style.opacity, metadataTargetOpacity, myGui.metadata);
+        if (infoElem && Math.abs(metadataTargetOpacity - (infoElem.style.opacity || 0)) > .01) {
+            infoElem.style.opacity = Utils.lerp(parseFloat(infoElem.style.opacity || 0), metadataTargetOpacity, myGui.metadata);
         }
 
 
@@ -1784,6 +2041,50 @@ function animate() {
 
 }
 
+// 从 URL 查询字符串读取参数
+function getUrlParameter(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  }
+  // 转换标注坐标为相对坐标系
+  function transformAnnotationCoordinates(coords) {
+    // 计算中心点（画布中心为参考点）
+    const centerX = renderer.view.width / 2;
+    const centerY = renderer.view.height / 2;
+    
+    // 转换后的坐标数组
+    const transformed = [];
+    
+    // 对每个坐标点进行转换
+    for (let i = 0; i < coords.length; i += 2) {
+      const x = coords[i];
+      const y = coords[i + 1];
+      
+      // 计算相对于中心的偏移
+      const relX = Math.round(x - centerX);
+      const relY = Math.round(centerY - y); // 翻转Y轴，使上方为正
+      
+      transformed.push(relX, relY);
+    }
+    
+    return transformed;
+  }
+  
+  // 将标注结果下载为文件
+  function downloadJSON(obj, filename) {
+    // 转换坐标
+    if (annotationMode) {
+      obj = transformAnnotationCoordinates(obj);
+    }
+    
+    const blob = new Blob([JSON.stringify(obj)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  
 // See which images are popular for people checking out on Google Maps
 document.getElementById('info-link').onclick = function(e) {
     ga('send', 'event', {

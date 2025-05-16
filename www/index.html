@@ -42,6 +42,50 @@
     ga('send', 'pageview');
     </script>
     <style>
+    @font-face {
+        font-family: 'Alibaba PuHuiTi';
+        src: url('/fonts/Alibaba-PuHuiTi-Light.ttf') format('truetype'),
+             url('/fonts/Alibaba-PuHuiTi-Light.otf') format('opentype');
+        font-weight: 300;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Alibaba PuHuiTi';
+        src: url('/fonts/Alibaba-PuHuiTi-Regular.ttf') format('truetype'),
+             url('/fonts/Alibaba-PuHuiTi-Regular.otf') format('opentype');
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Alibaba PuHuiTi';
+        src: url('/fonts/Alibaba-PuHuiTi-Medium.ttf') format('truetype'),
+             url('/fonts/Alibaba-PuHuiTi-Medium.otf') format('opentype');
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Alibaba PuHuiTi';
+        src: url('/fonts/Alibaba-PuHuiTi-Bold.ttf') format('truetype'),
+             url('/fonts/Alibaba-PuHuiTi-Bold.otf') format('opentype');
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Alibaba PuHuiTi';
+        src: url('/fonts/Alibaba-PuHuiTi-Heavy.ttf') format('truetype'),
+             url('/fonts/Alibaba-PuHuiTi-Heavy.otf') format('opentype');
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+    }
 
     html, body {
         position:fixed;
@@ -57,13 +101,15 @@
         overflow: hidden;
     }
     
-    .logo {
+.logo {
         width: 16.7%; /* 535/3200 = 16.7% */
         height: 4.9%; /* 105/2136 = 4.9% */
         position: absolute;
         top: 5.1%; /* 109/2136 = 5.1% */
         left: 3.2%; /* 102/3200 = 3.2% */
         z-index: 10;
+        transform: scale(1.25);
+        transform-origin: top left;
     }
     
     .header-row {
@@ -172,7 +218,7 @@
     #header {
         width: 38.3%; /* 1225/3200 = 38.3% */
         margin: 0 auto;
-        font-family: 'PingFang SC', sans-serif;
+        font-family: 'Alibaba PuHuiTi', sans-serif;
         font-size: 7.1vw; /* 228/3200 = 7.1% */
         font-weight: 600;
         text-transform: uppercase;
@@ -182,7 +228,7 @@
     }
     
     #subtitle {
-        font-family: 'PingFang SC', sans-serif;
+        font-family: 'Alibaba PuHuiTi', sans-serif;
         font-size: 2.5vw; /* 228*0.351/3200 = 2.5% */
         font-weight: 600;
         letter-spacing: 0.3em; /* 30% */
@@ -238,17 +284,34 @@
     
     #desc {
         position: absolute;
-        top: 4.9%; /* 105/2136 = 4.9% */
+        top: 5.1%; /* 105/2136 = 4.9% */
         left: 50%; /* 水平居中 */
         transform: translateX(-50%); /* 精确居中 */
         width: 50.5%; /* 1615/3200 = 50.5% */
-        font-family: 'PingFang SC', sans-serif;
-        font-weight: 400;
-        font-size: 1.5vw; /* 40/3200 = 1.25% */
-        line-height: 100%;
-        letter-spacing: 0.15em; /* 15% */
+        font-family: 'Alibaba PuHuiTi', sans-serif;
         text-align: center;
         z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .desc-cn {
+        font-weight: 500;
+        font-size: 2vw; /* 1.6vw * 1.25 */
+        line-height: 100%;
+        letter-spacing: 0.15em;
+        margin-bottom: 1vh; /* 添加底部间距 */
+        margin-top: 0;
+    }
+    
+    .desc-en {
+        font-weight: 400;
+        font-size: 1.625vw; /* 1.3vw * 1.25 */
+        line-height: 100%;
+        letter-spacing: 0.15em;
+        margin-top: 0;
+        margin-bottom: 0;
     }
 
     #app {
@@ -265,7 +328,7 @@
     }
     
     .btn-cn {
-        font-family: 'PingFang SC', sans-serif;
+        font-family: 'Alibaba PuHuiTi', sans-serif;
         font-size: 2.5vw; /* 适当缩小 */
         font-weight: 500;
         display: block;
@@ -273,7 +336,7 @@
     }
     
     .btn-en {
-        font-family: 'PingFang SC', sans-serif;
+        font-family: 'Alibaba PuHuiTi', sans-serif;
         font-size: 1.5vw; /* 适当缩小 */
         font-weight: 400;
         display: block;
@@ -475,10 +538,17 @@
         }
         
         #desc {
-            font-size: 1vw; /* 稍微缩小 */
             left: 50%;
             transform: translateX(-50%);
             width: 45%;
+        }
+        
+        .desc-cn {
+            font-size: 1.375vw; /* 1.1vw * 1.25 */
+        }
+        
+        .desc-en {
+            font-size: 1.125vw; /* 0.9vw * 1.25 */
         }
         
         #header {
@@ -521,7 +591,14 @@
             left: 50%;
             transform: translateX(-50%);
             width: 65%;
-            font-size: 2.5vw;
+        }
+        
+        .desc-cn {
+            font-size: 3.375vw; /* 2.7vw * 1.25 */
+        }
+        
+        .desc-en {
+            font-size: 2.75vw; /* 2.2vw * 1.25 */
         }
         
         #title-container {
@@ -570,10 +647,13 @@
                 <div class="logo">
                     <img src="/img/home/blue_up_logo.png" alt="Logo" width="100%">
                 </div>
-                <p id="desc">画一条线，找一片海洋，创造你与大海的故事<br>Draw a line, find a coastline, and create your story with the sea.</p>
+                <div id="desc">
+                    <p class="desc-cn">画一条线，找一片海洋，创造你与大海的故事</p>
+                    <p class="desc-en">Draw a line, find a coastline, and create your story with the sea.</p>
+                </div>
             </div>
             <div id="title-container">
-                <p id="header">LINE — UP</p>
+                <p id="header">LINE - UP</p>
                 <p id="subtitle">共绘海岸线</p>
             </div>
             <a class="start-button" href="javascript:void(0)" id="button-start">

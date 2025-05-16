@@ -1,6 +1,6 @@
 
 ## 运行服务器
-'''
+'''js
 pushd www; python -m http.server; popd
 '''
 ## 访问

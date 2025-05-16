@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Land Lines - Chrome Experiments</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+    <meta property="og:url" content="https://lines.chromeexperiments.com/" />
+    <meta property="og:title" content="Land Lines" />
+    <meta property="og:description" content="Land Lines is an experiment that lets you explore real Google Earth satellite imagery through gesture." />
+    <meta property="og:image" content="https://lines.chromeexperiments.com/img/LandLines_v2.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Land Lines">
+    <meta name="twitter:description" content="Land Lines is an experiment that lets you explore real Google Earth satellite imagery through gesture.">
+    <meta name="twitter:image" content="https://lines.chromeexperiments.com/img/LandLines_v2.jpg">
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-title" content="Land Lines">
+    <link rel="apple-touch-icon" sizes="36x36" href="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/webapp/LandLines_WebAppIcon_36x36.png">
+    <link rel="apple-touch-icon" sizes="48x48" href="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/webapp/LandLines_WebAppIcon_48x48.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/webapp/LandLines_WebAppIcon_72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/webapp/LandLines_WebAppIcon_96x96.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/webapp/LandLines_WebAppIcon_144x144.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/webapp/LandLines_WebAppIcon_192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-86371440-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+    <style>
+
+    html, body {
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        margin: 0;
+        color: white;
+    	background-color: black;
+    	font-family: 'Roboto Condensed', sans-serif;
+        font-weight: 300;
+        overflow: hidden;
+    }
+
+    a {
+        color: white;
+        text-decoration: none;
+    }
+
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        /*background:#f9f9f9;*/
+    }
+
+    li {
+        float: left;
+        padding-left:2px;
+        /*padding:5px 5px 10px 5px;*/
+    }
+
+    li a {
+       /* background-color:#ff9900;*/
+        display: block;
+        color: white;
+        text-align: center;
+        padding:10px;
+        text-decoration: none;
+    }
+
+    li a div {
+        /*background-color:#ff0099;*/
+        /*padding: 10px;*/
+    }
+
+    li a .inactive  {
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        border-color: rgba(255, 255, 255, 0);
+        border-bottom: none;
+    }
+
+    li a .active  {
+        border-bottom: 1px solid;
+    }
+
+    li a .inactive:hover  {
+        color: rgba(255, 255, 255, 1.0);
+    }
+
+    input,
+    textarea,
+    button,
+    select,
+    a {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    /* Change the link color to #111 (black) on hover */
+    /*li a .active:hover {
+        background-color: #9900ff;
+    }*/
+
+    #landing-container {
+
+        position: absolute;
+        display: table;
+        //table-layout: fixed;
+        width: 100%;
+        height: 100%;
+
+        z-index: 0;
+    }
+
+     #nav-draw {
+        z-index: 5;
+        padding-bottom:20px !important;
+    }
+
+     #nav-drag {
+        z-index: 5;
+        padding-bottom:20px !important;
+ 
+    }
+
+
+    #header {
+        font-size: 24pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-align: center;
+        letter-spacing: 2pt;
+        vertical-align: middle;
+        margin-top: 0;
+        margin-bottom: 5px;
+    }
+
+    #error {
+        font-size: 16pt;
+        color: #f9ff49;
+       /* background-color: #000;*/
+       /* max-width: 480px;*/
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: -28px;
+        margin-bottom: -28px;
+        display:none;
+    }
+    #error a {
+        color: #f9ff49;
+        text-decoration: underline;
+    }
+    #video_container {
+        width: 100%;
+        position: relative;
+        display:none;
+    }
+    #video {
+/*        margin-left: 50%;
+        left: -240px;
+        position: relative;
+        width: 480px;*/
+        width: 60%;
+        min-width: 300px ;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #bg{
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        top: 0px;
+        position: absolute;
+        //background-image: url("http://a4.mzstatic.com/eu/r30/Purple3/v4/3d/57/31/3d573127-31d5-e4a9-9f8e-986c4616d467/icon175x175.jpeg");
+        pointer-events: none;
+        will-change: transform; // creates a new paint layer
+        z-index: -40;
+    }
+
+    #desc {
+        margin-top: 0;
+        margin-bottom: 50px;
+    }
+
+    #app {
+        display: table-cell;
+        vertical-align: middle;
+        font-size: 12pt;
+        letter-spacing: 0.5pt;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.25);
+    }
+    .app-button {
+        border: 1px solid white;
+        background-color: rgba(0, 0, 0, 0.25);
+        display: block;
+        width: 225px;
+        height: 30px;
+        font-size: 13pt;
+        text-align: center;
+        vertical-align: middle;
+        margin: 0 auto;
+        padding-top: 10px;
+        margin-bottom: 10px;
+        visibility:hidden;
+    }
+    .app-button:last-child {
+        margin-bottom: 50px;
+    }
+
+    #nav {
+        display: none;
+        /*position: absolute;
+        top: 15px;
+        left: 10px;*/
+        font-size: 15pt;
+        font-weight: bold;
+        letter-spacing: 0.75pt;
+    }
+    #nav a {
+        /*margin-left: 5px;
+        margin-right: 5px;
+        cursor: default;
+        text-decoration: none;
+        padding-bottom: 4px;*/
+    }
+    #nav a:hover {
+        /*color: white;
+        border-color: white;
+        border-bottom: 1px solid;*/
+    }
+    #nav .inactive {
+        /*color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        border-color: rgba(255, 255, 255, 0);
+        border-bottom: none;*/
+    }
+    #nav .active {
+        /*border-bottom: 1px solid;*/
+    }
+    #nav .spacer {
+        position: relative;
+        top: 9px;
+    }
+
+    /*#gradient-top, #gradient-bottom {
+        position: absolute;
+        width: 100%;
+        background-size: auto 100%;
+    }
+    #gradient-top {
+        top: 0;
+        height: 100px;
+        background-image: url('img/gradient_top_1pixel.png');
+    }
+    #gradient-bottom {
+        bottom: 0;
+        height: 150px;
+        background-image: url('img/gradient_bottom_1pixel.png');
+    }*/
+
+    #chrome-experiment {
+        color: white;
+        position: absolute;
+        bottom: 0px;
+        left: 0;
+        padding-left: 1em;
+        padding-bottom: 1em;
+        width: 250px;
+    }
+    @media (max-width: 400px) {
+        #chrome-experiment {
+            padding-bottom: 14px;
+            width: 170px;
+        }
+    }
+
+    #privacy-terms {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        /*padding: 0 1em 1em 0;*/
+        padding: 0 16px 16px 0;
+        font-size: 9pt;
+        letter-spacing: 1pt;
+        text-transform: uppercase;
+    }
+
+    #overlay-open, #overlay-close {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        color: white;
+        padding: 1em;
+        //padding-top: 1em;
+
+    }
+    #overlay-close {
+        display: none;
+        padding: 1em;
+    }
+
+    #about-overlay {
+        display: none;
+        opacity: 0;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.85);
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+    #about-overlay-content {
+        width: 60%;
+        margin: 0 auto;
+        color: #c9c9c9;
+        font-size: 10pt;
+        letter-spacing: 0.5pt;
+        line-height: 2.3;
+    }
+    #about-overlay-content a {
+        color: white;
+        text-decoration: underline;
+    }
+    #about-overlay-content p {
+        margin: 8px 0;
+        font-family: 'Roboto', sans-serif;
+    }
+    .about-video {
+        position: relative;
+        margin-top: 50px;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        max-width: 100%;
+    }
+    .about-video iframe,
+    .about-video object,
+    .about-video embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .about-heading {
+        color: white;
+        font-size: 14pt;
+        letter-spacing: 1pt;
+        text-transform: uppercase;
+        padding-top: 40px;
+    }
+    .about-heading span {
+        padding-bottom: 3px;
+        border-bottom: 1px solid white;
+    }
+    .about-tech {
+        font-weight: bold;
+        padding-top: 10px;
+    }
+
+    #draw-container, #drag-container {
+        display: none;
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    /* Changes for mobile */
+    @media screen and (max-device-width: 1023px) {
+        #desc {
+            font-size: 11pt;
+        }
+
+        #about-overlay-content {
+            width: 80%;
+        }
+    }
+
+    </style>
+</head>
+
+<body>
+
+   
+    <canvas id="bg">Your browser doesn't support canvas</canvas>
+    <div id="landing-container">
+       
+
+        <div id="app">
+            <p id="header">Land Lines</p>
+            <p id="desc">Start with a line, let the planet complete the picture.</p>
+            <a class="app-button" href="javascript:void(0)" id="button-draw">Draw</a>
+            <p id="error"></p>
+            <div id="video_container"><div id="video"></div></div>
+        </div>
+
+    </div>
+
+    <iframe id="draw-container"></iframe>
+    
+
+    <!-- <div id="gradient-top"></div>
+    <div id="gradient-bottom"></div> -->
+
+    <div id="nav">
+        <ul>
+            <li><a href="javascript:void(0)" id="nav-draw"><div id="nav-draw-inner">Draw</div></a></li>
+            <li><span class="spacer">|</span></li>
+            <li><a href="javascript:void(0)" id="nav-draw"><div id="nav-draw-inner">draw</div></a></li>    
+        </ul>
+        <!-- <a href="javascript:void(0)" id="nav-draw" class="bigger" >Draw</a> | <a href="javascript:void(0)" id="nav-drag" >Drag</a> -->
+    </div>
+
+    <div id="privacy-terms">
+        
+    </div>
+
+    
+
+    
+
+    <div id="about-overlay">
+        <div id="about-overlay-content">
+
+            <div class="about-video"><iframe src="https://www.youtube.com/embed/w6-LK9BOVTA?rel=0&controls=1&showinfo=0" frameborder="0" allowfullscreen></iframe></div>
+
+            <div class="about-heading"><span>About</span></div>
+            <p>Satellite images provide a wealth of visual data from which we can visualize in interesting ways. <i>Land Lines</i> is an experiment that lets you explore Google Earth satellite imagery through gesture. “Draw” to find satellite images that match your every line; “Drag” to create an infinite line of connected rivers, highways and coastlines.</p>
+
+            <p>Using a combination of machine learning, optimized algorithms, and graphics card power, the experiment is able to run efficiently on your phone’s web browser without a need for backend servers.</p>
+
+            <p>Learn more about how the project was created in this <a href="https://developers.google.com/web/showcase/2016/land-lines" target="links">technical case study</a> or browse the <a href="https://github.com/ofZach/landlines" target="links">open-source code on GitHub</a>.</p>
+
+            <div class="about-heading"><span>Technology</span></div>
+
+            <div class="about-tech">Line Detection</div>
+            <p>We used a combination of <a href="http://opencv.org/" target="links">OpenCV</a> <a href="http://docs.opencv.org/3.1.0/d0/da5/tutorial_ximgproc_prediction.html" target="links">Structured Forests</a> and <a href="http://imagej.net/Ridge_Detection" target="links">ImageJ’s Ridge Detection</a> to analyze and identify dominant visual lines in the initial dataset of 50,000+ images. This helped cull down the original dataset to just a few thousand of the most interesting images.</p>
+
+            <div class="about-tech">Fast Data Lookup</div>
+            <p>For the draw application, we stored the resulting line data in a <a href="https://github.com/fpirsch/vptree.js" target="links">vantage point tree</a>. This data structure made it fast and easy to find matches from the dataset in real time right in your phone or desktop web browser.</p>
+
+            <div class="about-tech">WebGL</div>
+            <p>We used <a href="http://www.pixijs.com/" target="links">Pixi.js</a>, an open source library built upon the WebGL API, to rapidly draw and redraw 2D WebGL graphics without hindering performance. </p>
+
+            <div class="about-tech">Google Cloud Storage</div>
+            <p>All images are hosted on <a href="https://cloud.google.com/storage/" target="links">Google Cloud Storage</a> so images are served quickly to users worldwide.  </p>
+
+            <br><br>
+            
+            <p>Made by <a href="https://www.instagram.com/zach.lieberman/" target="links">Zach Lieberman</a>, <a href="http://mattfelsen.com/" target="links">Matt Felsen</a>, and the Data Arts Team. Special thanks to <a href="http://localprojects.net/" target="links">Local Projects</a>.</p>
+
+            <p><a href="http://storage.googleapis.com/navigator-media-usa/presskit/LandLines_PressKit_v1.zip" target="links">Download the Press Kit</a></p>
+
+            <br><br>
+        </div>
+    </div>
+    <a href="javascript:void(0)"><img id="overlay-close" src="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/close@2x.png" width="25"></img></a>
+
+    <script src="/js/third_party/dat.gui.min.js"></script>
+    <script src="/draw/js/Utils.js"></script>
+    <script>
+
+    /*
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    * 
+    *     http://www.apache.org/licenses/LICENSE-2.0
+    * 
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+    */
+    
+    var activeApp = '';
+
+    var gui;
+    var animatingElements = [];
+
+    var Gui = function() {
+        this.bgOverlay = 0.25;
+        this.motionSmooth = 0.1;
+        this.mouseXScale = 10;
+        this.mouseYScale = 10;
+        this.accelGammaDiv = 5;
+        this.accelBetaDiv = 3;
+    };
+    var myGui = new Gui();
+
+    // if user has #dev has, enable dev mode
+    var isDevMode = (window.location.hash.indexOf('dev') == -1) ? false : true;
+
+    // if url had #webglError, let's change the display
+    var isWebglErrorMode = (window.location.hash.indexOf('webglError') == -1) ? false : true;
+
+    // Do check to see if WebGL is supported
+    var canvas = document.createElement("canvas");
+    var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    // Report the result.
+    if (gl && gl instanceof WebGLRenderingContext) {;
+    } else {
+        isWebglErrorMode = true;
+    }
+
+
+    window.onload = function() {
+        
+        if (isDevMode) {
+
+            gui = new dat.GUI();
+            
+            var bgSlider = gui.add(myGui, 'bgOverlay', 0, 1);
+            var motionSmoothSlider = gui.add(myGui, 'motionSmooth', 0, 1);
+            var mouseXScaleSlider = gui.add(myGui, 'mouseXScale', 0, 100);
+            var mouseYScaleSlider = gui.add(myGui, 'mouseYScale', 0, 100);
+
+            var accelGammaDivSlider = gui.add(myGui, 'accelGammaDiv', 0.01, 10.0);
+            var accelBetaDivSlider = gui.add(myGui, 'accelBetaDiv', 0.01, 10.0);
+       
+            bgSlider.onChange(updateBgOpacity);
+
+        }
+
+        if (isWebglErrorMode){
+            document.getElementById('button-draw').style.display = 'none';
+            //document.getElementById('button-drag').style.display = 'none';
+
+            document.getElementById('video').innerHTML = ' <div class="about-video"><iframe src="https://www.youtube.com/embed/w6-LK9BOVTA?rel=0&amp;controls=1&amp;showinfo=0" frameborder="0" allowfullscreen></iframe></div>';
+
+            document.getElementById('error').innerHTML = 'This experience requires WebGL.<BR>Please try again using a WebGL enabled browser, such as <a href="https://www.google.com/chrome/">Google Chrome</a>';
+
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('video_container').style.display = 'block';
+        } else {
+            document.getElementById('button-draw').style.visibility = 'visible';
+            //document.getElementById('button-drag').style.visibility = 'visible';
+        }
+        
+        window.requestAnimationFrame(animate);
+
+    };
+
+    updateBackgroundSize();
+
+
+    var imageObj = new Image();
+
+    // Load a random background image
+    // Store the backgrounds in localStorag as they're used, and use those values
+    // to filter out the bgList to only use new ones
+    var bgList = ['1006', '1018', '1102', '1240', '1353', '1463', '5586', '6578', '1432', '1495', '1556', '1559', '1567', '1578', '1584', '1617', '1653', '1834', '5425'];
+    var filteredList = bgList.slice(0);
+    var usedBGs = localStorage.getItem('usedBGs') || '';
+    usedBGs = usedBGs.split(',');
+
+    // Remove the empty value from the array that results when you call
+    // Array.split() on an empty string
+    if (usedBGs.indexOf('') >= 0)
+        usedBGs.splice(usedBGs.indexOf(''), 1);
+
+    // Remove used backgrounds to create a filtered list
+    for (var i = 0; i < usedBGs.length; i++) {
+        if (filteredList.indexOf(usedBGs[i]) >= 0)
+            filteredList.splice(filteredList.indexOf(usedBGs[i]), 1);
+    }
+
+    // Check if we'v cycled through all of them
+    if (filteredList.length == 0) {
+        console.log('Used all backgrounds, resetting');
+        filteredList = bgList;
+        usedBGs = [];
+        localStorage.setItem('usedBGs', usedBGs);
+    }
+
+    // Finally pull a random image from the filtered list and store it in localStorage
+    var bgIndex = Math.floor(Math.random() * filteredList.length);
+    var bgFile = 'url("/img/landing/' + filteredList[bgIndex] + '.jpg")';
+    usedBGs.push(filteredList[bgIndex]);
+    localStorage.setItem('usedBGs', usedBGs.join(','));
+    
+
+    var canvas = document.getElementById('bg');
+    var context = canvas.getContext('2d');
+    imageObj.onload = function() {
+        
+        //context.drawImage(imageObj, 0, 0);
+    };
+    imageObj.src = "/img/landing/" + filteredList[bgIndex] + ".jpg";
+    // document.getElementById('app').style.backgroundImage = bgFile;
+    //document.getElementById('bg').style.backgroundImage = bgFile;
+
+    function show(elem) {
+        elem.style.opacity = 0;
+        elem.style.display = 'block';
+        elem.targetOpacity = 1;
+        animatingElements.push(elem);
+        
+        /*
+        var timer = setInterval(function() {
+            if (elem.style.opacity >= 1) {
+                elem.style.opacity = 1;
+                clearInterval(timer);
+                return;
+            }
+
+            elem.style.opacity = parseFloat(elem.style.opacity) + 0.07;
+        }, 1000 / 60);
+        */
+    }
+
+    function hide(elem) {
+        elem.style.opacity = 1;
+        elem.targetOpacity = 0;
+        animatingElements.push(elem);
+        
+        /*
+        var timer = setInterval(function() {
+            if (elem.style.opacity <= 0) {
+                elem.style.opacity = 0;
+                elem.style.display = 'none';
+                clearInterval(timer);
+                return;
+            }
+
+            elem.style.opacity = parseFloat(elem.style.opacity) - 0.07;
+        }, 1000 / 60);
+        */
+    }
+
+    function showAboutOverlay() {
+        ga('send', 'event', 'About', 'about', '');
+        show(document.getElementById('about-overlay'));
+        document.getElementById('overlay-close').style.display = 'block';
+    }
+
+    function hideAboutOverlay() {
+        hide(document.getElementById('about-overlay'));
+        document.getElementById('overlay-close').style.display = 'none';
+    }
+
+    function loadApp() {
+        //var nav = document.getElementById('nav');
+        //if (!nav.style.display)
+        //    show(nav);
+
+        // hide(document.getElementById('gradient-top'));
+        // hide(document.getElementById('gradient-bottom'));
+        hide(document.getElementById('landing-container'));
+        hide(document.getElementById('bg'));
+        //hide(document.getElementById('chrome-experiment'));
+        //hide(document.getElementById('privacy-terms'));
+
+        if (gui) {
+            gui.destroy();
+            gui = null;
+        }
+    }
+
+    function loadAppDraw() {
+        // Skip if this app is already active
+        if (activeApp == 'draw') return;
+        activeApp = 'draw';
+
+        loadApp();
+
+        var draw = document.getElementById('draw-container');
+        //var drag = document.getElementById('drag-container');
+        
+        //hide(drag);
+        show(draw);
+        //drag.src = '';
+        setTimeout(function(){ draw.src = '/draw' + window.location.hash; }, 250);
+
+        draw.onload = function() {
+            draw.style.visibility = 'visible';
+        }
+
+        document.getElementById('nav-draw-inner').className = 'active';
+        //document.getElementById('nav-drag-inner').className = 'inactive';
+        document.getElementById('nav-draw').className = 'active';
+        //document.getElementById('nav-drag').className = 'inactive';
+    }
+
+    function loadAppDrag() {
+        // Skip if this app is already active
+        
+    }
+
+    // Layout / background image stuff
+    function updateBgOpacity() {
+        document.getElementById('app').style.backgroundColor = 'rgba(0, 0, 0, ' + myGui.bgOverlay + ')';
+    }
+
+    var posSet = false;
+    var xPos = 50;
+    var yPos = 50;
+    var xPosTarget = 50;
+    var yPosTarget = 50;
+     
+   
+    function updateBackgroundMouse(e) {
+       
+        if (myGui !== 'undefined'){
+            //console.log(myGui);
+
+            var pctW = e.clientX / this.offsetWidth;
+            pctW -= 0.5;
+            pctW *= myGui.mouseXScale;
+
+            var pctH = e.clientY / this.offsetHeight;
+            pctH -= 0.5;
+            pctH *= myGui.mouseYScale;
+
+            xPosTarget = (50 + pctW);
+            yPosTarget = (50 + pctH);
+        }
+
+        
+        
+        //this.style.backgroundPositionX = (50 + pctW) + '%';
+        //this.style.backgroundPositionY = (50 + pctH) + '%';
+    }
+     
+    function updateBackgroundAccel(e) {
+        // var elem = document.getElementById('app');
+        // var elem = document.getElementById('landing-container');
+        // elem.style.backgroundPositionX = (50 + (e.gamma/1.5)) + '%';
+        // elem.style.backgroundPositionY = (50 + (e.beta/2)) + '%';
+
+        if (myGui !== 'undefined'){
+            xPosTarget = (50 + 2*(e.gamma/myGui.accelGammaDiv));
+            yPosTarget = (50 + -(e.beta/myGui.accelBetaDiv));
+        }
+
+    }
+
+    //var container
+    var lastX = 0;
+    var lastY = 0;
+    var lastTime = 0;
+    var alpha = 0;
+
+    function animate(timestamp) {
+
+        //
+
+
+       // console.log(document.getElementById('bg'));
+       
+
+        //console.log("animate " + 1000.0 / (timestamp-lastTime));
+
+        lastTime = timestamp;
+        //console.log(this.style);
+        if (myGui !== 'undefined'){
+            xPos = (1-myGui.motionSmooth) * xPos + myGui.motionSmooth * xPosTarget;
+            yPos = (1-myGui.motionSmooth) * yPos + myGui.motionSmooth * yPosTarget;
+        }
+
+        for (var i = animatingElements.length-1; i >= 0; i--) {
+            var elem = animatingElements[i];
+            var opacity = Utils.lerp(elem.style.opacity, elem.targetOpacity, 0.18);
+            
+            elem.style.opacity = opacity;
+
+            if (Math.abs(elem.style.opacity - elem.targetOpacity) <= 0.01) {
+                if (elem.targetOpacity == 0) {
+                    elem.style.display = 'none';
+                }
+                animatingElements.splice(i, 1);
+            }
+        }
+        
+        
+        var canvas = document.getElementById('bg');
+        
+
+        // if the BG hasn't faded out
+        if (canvas.style.display !== 'none'){
+
+            // if the apps or about page aren't on screen
+            if (document.getElementById('about-overlay').style.display === 'none' &&
+                document.getElementById('draw-container').style.display === 'none' //&&
+                //document.getElementById('drag-container').style.display === 'none'
+                ){
+
+                var context = canvas.getContext('2d');
+                // adjust canvas size if need be (is )
+                // if (context.canvas.width !== window.innerWidth ||
+                //     context.canvas.height !== window.innerHeight){
+                //      //console.log("resize");
+                //      context.canvas.width  = window.innerWidth;
+                //      context.canvas.height = window.innerHeight;
+                // }
+                var scalew =  context.canvas.width / imageObj.width;
+                var scaleh = context.canvas.height / imageObj.height ;
+                var maxScale = Math.max(scalew, scaleh);
+
+               
+                var midX = context.canvas.width * (1.0 - (xPos/100));
+                var midY = context.canvas.height * (1.0 - (yPos/100));;
+
+                //console.log("midY " + midY  +  " " + midY/(context.canvas.height*0.5));
+
+                var yscale = 1.0 + Math.abs(1.0 - midY/(context.canvas.height*0.5));
+                var xscale = 1.0 + Math.abs(1.0 - midX/(context.canvas.width*0.5));
+                var scale = Math.max(Math.max(yscale, xscale), 1.25);
+                var w = maxScale * imageObj.width * scale;
+                var h = maxScale * imageObj.height * scale;
+                
+                alpha = 0.9 * alpha + 0.1 * 1.0;
+
+                if (alpha < 0.99){
+                    context.fillStyle="black";
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    context.globalAlpha = alpha;
+                    context.drawImage(imageObj, -w/2 + midX, -h/2+ midY,  w,h);
+                } else {
+                    context.globalAlpha = 1.0;
+                    context.drawImage(imageObj, -w/2 + midX, -h/2+ midY,  w,h);
+                }
+               
+                //console.log(xPos + " " + yPos);
+            }
+            
+        }
+
+        window.requestAnimationFrame(animate);
+  
+    }
+
+    function updateBackgroundSize() {
+
+        // twitter ios fix
+        // http://stackoverflow.com/questions/27379581/web-page-not-getting-100-height-in-twitter-app-on-ios-8
+        document.querySelector("html").style.height = window.innerHeight + "px" 
+
+        var canvas = document.getElementById('bg');       
+        var context = canvas.getContext('2d');
+
+
+
+        if (context.canvas.width !== window.innerWidth ||
+            context.canvas.height !== window.innerHeight){
+             //console.log("resize");
+             context.canvas.width  = window.innerWidth;
+             context.canvas.height = window.innerHeight;
+        }
+        
+        if (typeof(imageObj) !== 'undefined'){
+            if (imageObj.width !== 'undefined'){
+
+                var scalew =  context.canvas.width / imageObj.width;
+                var scaleh = context.canvas.height / imageObj.height ;
+                var maxScale = Math.max(scalew, scaleh);
+
+                var w = maxScale * imageObj.width * 1.07;
+                var h = maxScale * imageObj.height * 1.07;
+                var midX = context.canvas.width * (1.0 - (xPos/100));
+                var midY = context.canvas.height * (1.0 - (yPos/100));;
+                
+                context.fillStyle="black";
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                //context.globalAlpha = 0.4;
+                //context.drawImage(imageObj, -w/2 + midX, -h/2+ midY,  w,h);
+            }
+        }
+
+      
+
+        // if (window.innerHeight > window.innerWidth)
+        //     // document.getElementById('app').style.backgroundSize = 'auto 150%'
+        // document.getElementById('bg').style.backgroundSize = 'auto 150%'
+        // else
+        //     // document.getElementById('app').style.backgroundSize = '150%'
+        // document.getElementById('bg').style.backgroundSize = '150%'
+    }
+
+    document.getElementById('about-overlay').style.display = 'none';
+    document.getElementById('draw-container').style.display = 'none';
+    //document.getElementById('drag-container').style.display = 'none';
+
+    //document.getElementById('overlay-open').onclick = showAboutOverlay;
+    //document.getElementById('overlay-close').onclick = hideAboutOverlay;
+
+    document.getElementById('button-draw').onclick = loadAppDraw;
+    //document.getElementById('button-drag').onclick = loadAppDrag;
+    document.getElementById('nav-draw').onclick = loadAppDraw;
+    //document.getElementById('nav-drag').onclick = loadAppDrag;
+
+    // document.getElementById('app').onmousemove = updateBackgroundMouse;
+    document.getElementById('landing-container').onmousemove = updateBackgroundMouse;
+    window.addEventListener('resize', updateBackgroundSize, false);
+    window.addEventListener('deviceorientation', updateBackgroundAccel, false);
+    </script>
+</body>
+
+</html>

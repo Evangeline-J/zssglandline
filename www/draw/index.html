@@ -140,20 +140,38 @@
 
         #info {
             position: absolute;
-            bottom: 0px;
-            text-transform: uppercase;
-            font-size: 20pt;
-            padding: 0 0 15px 15px;
+            top: 80%;
+            left: 5.25%;
+            z-index: 10;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            font-size: 16px;
+            line-height: 1.5;
+            pointer-events: none;
         }
-        #info a {
-            color: white;
+        #info .location {
+            font-size: 24px;
+            font-family: 'Roboto Condensed', sans-serif;
             font-weight: 700;
-            letter-spacing: 0.5pt;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        #info .location img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        #info .tag {
+            font-size: 18px;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 400;
         }
         #info-attribution {
             text-transform: none;
             font-size: 8pt;
             padding-top: 4px;
+            display: none;
         }
 
         #loading {
@@ -190,9 +208,12 @@
     <div id="gradient-bottom"></div>
 
     <div id="info">
-        <!-- <div><a id="info-line1" href="" target="maps"></a></div>
-        <div><a id="info-line2" href="" target="maps"></a></div> -->
-        <a id="info-link" href="" target="maps"></a>
+        <div class="location">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJDOC4xMyAyIDUgNS4xMyA1IDlDNSAxNC4yNSAxMiAyMiAxMiAyMkMxMiAyMiAxOSAxNC4yNSAxOSA5QzE5IDUuMTMgMTUuODcgMiAxMiAyWk0xMiAxMkMxMC4zNSAxMiA5IDEwLjY1IDkgOUM5IDcuMzUgMTAuMzUgNiAxMiA2QzEzLjY1IDYgMTUgNy4zNSAxNSA5QzE1IDEwLjY1IDEzLjY1IDEyIDEyIDEyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==" alt="Location">
+            <span id="coordinates">8°41'S 115°16'E</span>
+        </div>
+        <div class="tag"># 海洋保护行动在发生</div>
+        <div class="tag"># 海洋研究在发生</div>
         <div id="info-attribution"></div>
     </div>
     

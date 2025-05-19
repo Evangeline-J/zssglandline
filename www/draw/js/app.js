@@ -545,8 +545,7 @@ function updateMetadata(data) {
     if (!data) {
         console.error('元数据不存在:', data);
         // 设置默认值
-        document.getElementById('info-link').innerHTML = "未找到元数据";
-        document.getElementById('info-link').href = "#";
+        document.getElementById('coordinates').innerText = "8°41'S 115°16'E";
         document.getElementById('info-attribution').innerText = "";
         return;
     }
@@ -557,8 +556,8 @@ function updateMetadata(data) {
     var attribution = data['attribution'] || '';
     var url = data['url'] || '';
 
-    document.getElementById('info-link').innerHTML = line1 + "<br>" + line2;
-    document.getElementById('info-link').href = url;
+    // 只更新坐标部分，保持两行静态文本不变
+    document.getElementById('coordinates').innerText = line1;
     document.getElementById('info-attribution').innerText = attribution;
 
     // 添加安全检查，确保ga函数存在
@@ -2157,10 +2156,10 @@ function getUrlParameter(name) {
   }
   
 // See which images are popular for people checking out on Google Maps
-document.getElementById('info-link').onclick = function(e) {
-    ga('send', 'event', {
-        eventCategory: 'Outbound Link',
-        eventAction: 'click',
-        eventLabel: e.target.href
-    });
-}
+// document.getElementById('info-link').onclick = function(e) {
+//     ga('send', 'event', {
+//         eventCategory: 'Outbound Link',
+//         eventAction: 'click',
+//         eventLabel: e.target.href
+//     });
+// }

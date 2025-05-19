@@ -940,7 +940,17 @@
 
         // hide(document.getElementById('gradient-top'));
         // hide(document.getElementById('gradient-bottom'));
-        hide(document.getElementById('landing-container'));
+        
+        // 保留header-row元素，只隐藏landing-container中的其他元素
+        var headerRow = document.querySelector('.header-row');
+        var landingContainer = document.getElementById('landing-container');
+        
+        // 将header-row移动到body直接子元素，避免被隐藏
+        if (headerRow && landingContainer) {
+            document.body.appendChild(headerRow);
+        }
+        
+        hide(landingContainer);
         hide(document.getElementById('bg'));
         // hide(document.getElementById('chrome-experiment'));
         // hide(document.getElementById('privacy-terms'));

@@ -49,6 +49,95 @@
             background-image: url('../img/gradient_bottom_1pixel.png');
         }
 
+        /* 添加header-row样式 */
+        .header-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            padding-top: 20px;
+        }
+        
+        .logo {
+            width: 16.7%;
+            height: 4.9%;
+            position: relative;
+            margin-left: 3.2%;
+            z-index: 10;
+            transform: scale(1.25);
+            transform-origin: top left;
+        }
+        
+        #desc {
+            position: relative;
+            margin-left: 20%;
+            width: 50.5%;
+            font-family: 'Roboto Condensed', sans-serif;
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .desc-cn {
+            font-weight: 500;
+            font-size: 2vw;
+            line-height: 100%;
+            letter-spacing: 0.15em;
+            margin-bottom: 1vh;
+            margin-top: 0;
+        }
+        
+        .desc-en {
+            font-weight: 400;
+            font-size: 1.625vw;
+            line-height: 100%;
+            letter-spacing: 0.15em;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        
+        /* 响应式设计 */
+        @media screen and (min-width: 1025px) {
+            .logo {
+                width: 14%;
+            }
+            
+            .desc-cn {
+                font-size: 1.375vw;
+            }
+            
+            .desc-en {
+                font-size: 1.125vw;
+            }
+        }
+        
+        @media screen and (max-width: 767px) {
+            .logo {
+                width: 25%;
+                margin-left: 2%;
+            }
+            
+            #desc {
+                margin-left: 10%;
+                width: 65%;
+            }
+            
+            .desc-cn {
+                font-size: 3.375vw;
+            }
+            
+            .desc-en {
+                font-size: 2.75vw;
+            }
+        }
+
         #info {
             position: absolute;
             bottom: 0px;

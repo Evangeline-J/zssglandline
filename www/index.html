@@ -692,7 +692,7 @@
         <img id="chrome-experiment" src="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/CE_badge@2x.png"></img>
     </a> -->
 
-    <div id="about-overlay">
+    <!-- <div id="about-overlay">
         <div id="about-overlay-content">
 
             <div class="about-video"><iframe src="https://www.youtube.com/embed/w6-LK9BOVTA?rel=0&controls=1&showinfo=0" frameborder="0" allowfullscreen></iframe></div>
@@ -726,8 +726,8 @@
 
             <br><br>
         </div>
-    </div>
-    <a href="javascript:void(0)"><img id="overlay-close" src="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/close@2x.png" width="25"></img></a>
+    </div> -->
+    <!-- <a href="javascript:void(0)"><img id="overlay-close" src="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/close@2x.png" width="25"></img></a> -->
 
     <script src="/js/third_party/dat.gui.min.js"></script>
     <script src="/draw/js/Utils.js"></script>
@@ -921,28 +921,29 @@
         */
     }
 
-    function showAboutOverlay() {
-        ga('send', 'event', 'About', 'about', '');
-        show(document.getElementById('about-overlay'));
-        document.getElementById('overlay-close').style.display = 'block';
-    }
+    // function showAboutOverlay() {
+    //     ga('send', 'event', 'About', 'about', '');
+    //     show(document.getElementById('about-overlay'));
+    //     document.getElementById('overlay-close').style.display = 'block';
+    // }
 
-    function hideAboutOverlay() {
-        hide(document.getElementById('about-overlay'));
-        document.getElementById('overlay-close').style.display = 'none';
-    }
+    // function hideAboutOverlay() {
+    //     hide(document.getElementById('about-overlay'));
+    //     document.getElementById('overlay-close').style.display = 'none';
+    // }
 
     function loadApp() {
         var nav = document.getElementById('nav');
-        if (!nav.style.display)
-            show(nav);
+        hide(nav);
+        // if (!nav.style.display)
+        //     show(nav);
 
         // hide(document.getElementById('gradient-top'));
         // hide(document.getElementById('gradient-bottom'));
         hide(document.getElementById('landing-container'));
         hide(document.getElementById('bg'));
-        hide(document.getElementById('chrome-experiment'));
-        hide(document.getElementById('privacy-terms'));
+        // hide(document.getElementById('chrome-experiment'));
+        // hide(document.getElementById('privacy-terms'));
 
         if (gui) {
             gui.destroy();
@@ -1091,7 +1092,8 @@
         // if the BG hasn't faded out
         if (canvas.style.display !== 'none'){
             // if the apps or about page aren't on screen
-            if (document.getElementById('about-overlay').style.display === 'none' &&
+            if (
+                // document.getElementById('about-overlay').style.display === 'none' &&
                 document.getElementById('draw-container').style.display === 'none' &&
                 document.getElementById('drag-container').style.display === 'none'
                 ){
@@ -1197,12 +1199,12 @@
         // document.getElementById('bg').style.backgroundSize = '150%'
     }
 
-    document.getElementById('about-overlay').style.display = 'none';
+    // document.getElementById('about-overlay').style.display = 'none';
     document.getElementById('draw-container').style.display = 'none';
     document.getElementById('drag-container').style.display = 'none';
 
-    document.getElementById('overlay-open').onclick = showAboutOverlay;
-    document.getElementById('overlay-close').onclick = hideAboutOverlay;
+    // document.getElementById('overlay-open').onclick = showAboutOverlay;
+    // document.getElementById('overlay-close').onclick = hideAboutOverlay;
 
     document.getElementById('button-start').onclick = loadAppDraw;
     document.getElementById('nav-draw').onclick = loadAppDraw;

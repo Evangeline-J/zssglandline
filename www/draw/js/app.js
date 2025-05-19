@@ -1890,12 +1890,19 @@ function animate() {
             if (lastSprite.texture.baseTexture &&
                 lastSprite.texture.baseTexture.hasLoaded) {
 
-                if (!textureHasLoaded && pulseComplete) {
-                    //console.log('Texture just finished loading!');
-                    textureHasLoaded = true;
-                    updateMetadata(matchedMetadata);
-                    metadataTargetOpacity = 1;
-                }
+            if (!textureHasLoaded && pulseComplete) {
+                //console.log('Texture just finished loading!');
+                textureHasLoaded = true;
+                updateMetadata(matchedMetadata);
+                metadataTargetOpacity = 1;
+                
+                // 延迟2秒后显示保存按钮
+                setTimeout(function() {
+                    var saveButton = document.getElementById('button-save');
+                    saveButton.style.visibility = 'visible';
+                    saveButton.style.opacity = '1';
+                }, 2000);
+            }
             }
 
             // Set the line style based on our state
@@ -2172,3 +2179,89 @@ function getUrlParameter(name) {
 //         eventLabel: e.target.href
 //     });
 // }
+
+// 保存图片功能
+document.getElementById('button-save').addEventListener('click', function() {
+    console.log('保存图片按钮被点击');
+    // 确保有匹配的图片
+    // if (sprites.length === 0 || !textureHasLoaded) {
+    //     console.error('没有可保存的图片');
+    //     return;
+    // }
+    
+    // // 创建一个临时canvas来绘制当前图片
+    // var canvas = document.createElement('canvas');
+    // var ctx = canvas.getContext('2d');
+    
+    // // 获取最后一个sprite（当前匹配的图片）
+    // var sprite = sprites[sprites.length - 1];
+    
+    // // 获取图片的URL
+    // var imgUrl = sprite.texture.baseTexture.source.src;
+    // var imgId = imgUrl.split('/').pop().split('.')[0];
+    
+    // // 创建一个新的Image对象
+    // var img = new Image();
+    // img.crossOrigin = 'Anonymous'; // 处理跨域问题
+    
+    // img.onload = function() {
+    //     // 设置canvas尺寸为图片原始尺寸
+    //     canvas.width = img.width;
+    //     canvas.height = img.height;
+        
+    //     // 绘制图片到canvas
+    //     ctx.drawImage(img, 0, 0);
+        
+    //     // 将canvas转换为数据URL
+    //     var dataURL = canvas.toDataURL('image/jpeg', 0.95);
+        
+    //     // 创建下载链接
+    //     var link = document.createElement('a');
+    //     link.href = dataURL;
+    //     link.download = '海岸线_' + imgId + '.jpg';
+        
+    //     // 模拟点击下载
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     document.body.removeChild(link);
+        
+    //     // 记录事件
+    //     if (typeof ga === 'function') {
+    //         ga('send', 'event', 'Draw', 'save_image', imgId);
+    //     }
+    // };
+    
+    // img.onerror = function() {
+    //     console.error('图片加载失败:', imgUrl);
+        
+    //     // 尝试直接使用当前渲染的场景作为备选
+    //     try {
+    //         // 创建一个新的canvas，大小与当前视图相同
+    //         canvas.width = renderer.view.width;
+    //         canvas.height = renderer.view.height;
+            
+    //         // 将当前渲染的场景绘制到canvas
+    //         renderer.extract.canvas(stage).then(function(extractedCanvas) {
+    //             ctx.drawImage(extractedCanvas, 0, 0);
+                
+    //             // 将canvas转换为数据URL
+    //             var dataURL = canvas.toDataURL('image/jpeg', 0.95);
+                
+    //             // 创建下载链接
+    //             var link = document.createElement('a');
+    //             link.href = dataURL;
+    //             link.download = '海岸线_场景_' + imgId + '.jpg';
+                
+    //             // 模拟点击下载
+    //             document.body.appendChild(link);
+    //             link.click();
+    //             document.body.removeChild(link);
+    //         });
+    //     } catch (e) {
+    //         console.error('保存场景失败:', e);
+    //     }
+    // };
+    
+    // // 设置图片源
+    // img.src = imgUrl;
+});

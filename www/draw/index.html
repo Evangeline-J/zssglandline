@@ -226,6 +226,78 @@
             display: none;
             pointer-events: none;
         }
+        
+        /* 保存图片按钮样式 */
+        .save-button {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 29.5%;
+            height: 9.5%;
+            border-radius: 120px;
+            background-color: rgba(58, 58, 58, 0.6);
+            border: 1px solid rgba(255, 255, 255, 1);
+            box-shadow: 0px 4px 15px 0px rgba(61, 61, 61, 0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, opacity 0.5s;
+            z-index: 100;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .save-button:hover {
+            background-color: rgba(58, 58, 58, 0.8);
+        }
+        
+        .btn-cn {
+            font-family: 'Alibaba PuHuiTi', sans-serif;
+            font-size: 2.5vw;
+            font-weight: 500;
+            display: block;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.1vh;
+        }
+        
+        .btn-en {
+            font-family: 'Alibaba PuHuiTi', sans-serif;
+            font-size: 1.5vw;
+            font-weight: 400;
+            display: block;
+            letter-spacing: 0.1em;
+        }
+        
+        /* 响应式设计 - 保存按钮 */
+        @media screen and (min-width: 1025px) {
+            .btn-cn {
+                font-size: 2.15vw;
+            }
+            
+            .btn-en {
+                font-size: 1.2vw;
+            }
+        }
+        
+        @media screen and (max-width: 767px) {
+            .save-button {
+                width: 60%;
+                height: 8%;
+                bottom: 8%;
+            }
+            
+            .btn-cn {
+                font-size: 4vw;
+            }
+            
+            .btn-en {
+                font-size: 2.5vw;
+            }
+        }
     </style>
 
  
@@ -244,11 +316,15 @@
         </div>
         <div class="tag"># 海洋保护行动在发生</div>
         <div class="tag"># 海洋研究在发生</div>
-        <div id="info-attribution"></div>
-    </div>
-    
+    <div id="info-attribution"></div>
+</div>
 
-    <div id="loading">
+<a class="save-button" href="javascript:void(0)" id="button-save" style="opacity: 0; visibility: hidden;">
+    <span class="btn-cn">保存图片</span>
+    <span class="btn-en">SAVE IMAGE</span>
+</a>
+    
+<div id="loading">
         <div id="progress">Loading</div>
         <img id="instruction">
     </div>

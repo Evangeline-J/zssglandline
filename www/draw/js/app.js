@@ -1074,6 +1074,11 @@ stage.mousedown = stage.touchstart = function(moveData) {
     pulseTimer = setTimeout(function() {
         pulseComplete = true;
     }, myGui.pulseWaitTime * 1000);
+    
+    // 显示指导文字div
+    if (document.getElementById('instruction-text')) {
+        document.getElementById('instruction-text').style.display = 'block';
+    }
 
     pts = [];
     pts.push(moveData.data.global.x);
@@ -1679,6 +1684,11 @@ while (d > myGui.cutThreshold && countMatching < myGui.numMaxCuts) {
     stage.addChildAt(bg, 0);
 
     matched = true;
+    
+    // 隐藏指导文字div
+    if (document.getElementById('instruction-text')) {
+        document.getElementById('instruction-text').style.display = 'none';
+    }
 
     //----------------------------
 

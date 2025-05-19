@@ -288,9 +288,9 @@
     #desc {
         position: absolute;
         top: 5.1%; /* 105/2136 = 4.9% */
-        left: 50%; /* 水平居中 */
+        left: 57%; /* 水平居中 */
         transform: translateX(-50%); /* 精确居中 */
-        width: 50.5%; /* 1615/3200 = 50.5% */
+        width: 55%; /* 1615/3200 = 50.5% */
         font-family: 'Alibaba PuHuiTi', sans-serif;
         text-align: center;
         z-index: 10;
@@ -575,7 +575,23 @@
     
     /* 响应式设计 - 平板设备（基准设计） */
     @media screen and (min-width: 768px) and (max-width: 1024px) {
-        /* 平板设备是基准设计，保持原样 */
+        .logo {
+            width: 18%; 
+        }
+
+        .btn-cn {
+            font-size: 4vw;
+        }
+        
+        .btn-en {
+            font-size: 2.5vw;
+        }
+        
+        .start-button {
+            width: 60%;
+            height: 8%;
+            bottom: 30%;
+        }
     }
     
     /* 响应式设计 - 移动设备 */

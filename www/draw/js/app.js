@@ -1764,6 +1764,59 @@ function animate() {
                 elem = document.getElementById('instruction');
                 elem.src = '../img/instruction-draw@2x.gif';
                 elem.style.display = 'block';
+                
+                // 添加指导文字
+                var textContainer = document.createElement('div');
+                textContainer.id = 'instruction-text';
+                textContainer.innerHTML = '<p>请在任意处划出你想要的线</p><p>Please draw the line wherever you want.</p>';
+
+                // 设置基本样式
+                textContainer.style.position = 'absolute';
+                textContainer.style.width = '100%';
+                textContainer.style.textAlign = 'center';
+                textContainer.style.top = '72.85%'; // 1556px/2136px
+                textContainer.style.color = 'white';
+                textContainer.style.fontFamily = "'Alibaba PuHuiTi', sans-serif";
+                textContainer.style.zIndex = '10';
+                
+                // 设置响应式字体大小
+                var style = document.createElement('style');
+                style.textContent = `
+                    #instruction-text p:first-child {
+                        font-size: 2.5vw;
+                        font-weight: 400;
+                        margin-bottom: 0.1vh;
+                        letter-spacing: 0.2vw;
+                    }
+                    
+                    #instruction-text p:last-child {
+                        font-size: 1.25vw;
+                        font-weight: 400;
+                        letter-spacing: 0.15vw;
+                    }
+                    
+                    /* 媒体查询 - 大屏幕 */
+                    @media screen and (min-width: 1200px) {
+                        #instruction-text p:first-child {
+                            font-size: 2vw;
+                        }
+                        #instruction-text p:last-child {
+                            font-size: 1.5vw;
+                        }
+                    }
+                    
+                    /* 媒体查询 - 小屏幕/移动设备 */
+                    @media screen and (max-width: 767px) {
+                        #instruction-text p:first-child {
+                            font-size: 4vw;
+                        }
+                        #instruction-text p:last-child {
+                            font-size: 3vw;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+                document.body.appendChild(textContainer);
             }, 3000); // 延迟3000毫秒（3秒）
         }
     }

@@ -1078,6 +1078,13 @@ stage.mousedown = stage.touchstart = function(moveData) {
     if (document.getElementById('instruction-text')) {
         document.getElementById('instruction-text').style.display = 'block';
     }
+    
+    // 隐藏保存图片按钮
+    var saveButton = document.getElementById('button-save');
+    if (saveButton) {
+        saveButton.style.visibility = 'hidden';
+        saveButton.style.opacity = '0';
+    }
 
     pts = [];
     pts.push(moveData.data.global.x);

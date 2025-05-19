@@ -1744,7 +1744,14 @@ function animate() {
 
 
         if (document.getElementById("progress") != null) {
-            document.getElementById("progress").innerHTML = "Loading</br>" + Math.round(preloadPct * 100) + " / 100";
+            // 创建加载动画HTML，使用loading.gif，文字在图层之上并且水平垂直居中
+            var loadingHTML = '<div style="position:relative; height:auto;">' +
+                              '<img src="../img/loading.gif" style="width:100%; height:100%;">' +
+                              '<div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center; width:100%;">' +
+                              '<div style="font-family:\'Alibaba PuHuiTi\', sans-serif; font-weight:400; font-size:2.5vw; margin-bottom:0.1vh; letter-spacing:0.1em;">加载中...</div>' +
+                              '<div style="font-family:\'Alibaba PuHuiTi\', sans-serif; font-weight:400; font-size:1.25vw; letter-spacing:0.1em;">LOADING</div>' +
+                              '</div></div>';
+            document.getElementById("progress").innerHTML = loadingHTML;
         }
         //document.getElementById("progress").innerHTML = "Loading " + preloadPct;
         //console.log("PRELOAD " + pctData + " " + pctMetaData + " " + pctParsed + " " + preloadPct);
@@ -1826,7 +1833,7 @@ function animate() {
                 `;
                 document.head.appendChild(style);
                 document.body.appendChild(textContainer);
-            }, 3000); // 延迟3000毫秒（3秒）
+            }, 30000); // 延迟3000毫秒（3秒）
         }
     }
 

@@ -1711,6 +1711,8 @@ function animate() {
     //      console.log(requestStatus);
     // }
 
+    console.log("vptrees.length", vptrees.length);
+
     if (vptrees.length === 0) {
         // we are preloading, let's do some math. 
         var pctData = 0.0;
@@ -1746,17 +1748,23 @@ function animate() {
     if (vptrees.length > 0) {
         if (!finishedLoading) {
             finishedLoading = true;
-            // Remove 'Loading' text
-            var elem = document.getElementById('loading');
-            elem.removeChild(document.getElementById('progress'));
+            
+            // 延迟3秒移除加载进度条，确保用户能看到加载进度
+            setTimeout(function() {
+                // Remove 'Loading' text
+                var elem = document.getElementById('loading');
+                if (document.getElementById("progress") != null) {
+                    elem.removeChild(document.getElementById('progress'));
+                }
 
-            // Stop using the loading div to block input
-            elem.style.pointerEvents = 'none'
+                // Stop using the loading div to block input
+                elem.style.pointerEvents = 'none'
 
-            // Temporarily clear & restore img src so that gif animation resets to beginning
-            elem = document.getElementById('instruction');
-            elem.src = '../img/instruction-draw@2x.gif';
-            elem.style.display = 'block';
+                // Temporarily clear & restore img src so that gif animation resets to beginning
+                elem = document.getElementById('instruction');
+                elem.src = '../img/instruction-draw@2x.gif';
+                elem.style.display = 'block';
+            }, 3000); // 延迟3000毫秒（3秒）
         }
     }
 

@@ -502,44 +502,72 @@
         }
     }
 
-    /* 响应式设计 - 平板横屏 */
+    /* 响应式设计 - 平板横屏（默认样式） */
     @media (min-width: 1024px) and (max-width: 1365px) {
-        /* .logo {
-            width: 18%; 
-        } */
-    }
-
-
-    /* 响应式设计 - PC端 */
-    @media screen and (min-width: 1025px) {
-        
-        
         
     }
-    
-    /* 响应式设计 - 平板设备（基准设计） */
-    @media screen and (min-width: 768px) and (max-width: 1024px) {
-        
 
-        /* .btn-cn {
-            font-size: 4vw;
+    /* 响应式设计 - 平板竖屏 */
+    @media (min-width: 768px) and (max-width: 1023px) {
+        .logo {
+            width: 19%; 
+            top: 3.2%;
+        }
+
+        #desc {
+            left: 57%;
+            transform: translateX(-50%);
+            width: 60%;
+            top: 3.2%;
+        }
+        
+        .desc-cn {
+            font-size: 1.8vw;
+            margin-bottom: 0.7vh;
+        }
+        
+        .desc-en {
+            font-size: 1.45vw; 
+        }
+
+        #title-container {
+            top: 32%;
+        }
+        
+        #header {
+            font-size: 10.5vw;
+            margin-bottom: 2.6vh;
+        }
+        
+        #subtitle {
+            font-size: 5.4vw;
+        }
+
+        .start-button {
+            width: 25%;
+            height: 10.5%;
+            top: 73%;
+        }
+        
+        .btn-cn {
+            font-size: 3.15vw;
         }
         
         .btn-en {
-            font-size: 2.5vw;
+            font-size: 1.7vw;
         }
-        
+
         .start-button {
-            width: 60%;
-            height: 8%;
-            bottom: 30%;
-        } */
+            width: 45%;
+            height: 6.3%;
+            top: 70%;
+        }
     }
     
     /* 响应式设计 - 移动设备 */
     @media screen and (max-width: 767px) {
         .logo {
-            width: 25%;
+            width: 30%;
             top: 3%;
             left: 3%;
         }
@@ -564,26 +592,27 @@
         }
         
         #header {
-            width: 80%;
-            font-size: 10vw;
+            width: 100%;
+            font-size: 13vw;
         }
         
         #subtitle {
-            font-size: 4vw;
+            font-size: 6vw;
+        }
+
+        .start-button {
+            width: 56%;
+            height: 6.5%;
+            bottom: 30%;
         }
         
         .btn-cn {
-            font-size: 4vw;
+            font-size: 4.8vw;
+            margin-bottom: 0.3vh;
         }
         
         .btn-en {
-            font-size: 2.5vw;
-        }
-        
-        .start-button {
-            width: 50%;
-            height: 6%;
-            bottom: 30%;
+            font-size: 3vw;
         }
     }
 

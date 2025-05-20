@@ -101,8 +101,8 @@
         overflow: hidden;
     }
     
-.logo {
-        width: 16.7%; /* 535/3200 = 16.7% */
+    .logo {
+        width: 16%; /* 535/3200 = 16.7% */
         height: 4.9%; /* 105/2136 = 4.9% */
         position: absolute;
         top: 5.1%; /* 109/2136 = 5.1% */
@@ -192,8 +192,6 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        /* 基于平板设计稿的比例 3200x2136 */
-        /* aspect-ratio: 3200/2136; */
     }
 
      #nav-draw {
@@ -207,32 +205,29 @@
  
     }
 
-
     #title-container {
         position: absolute;
         width: 100%;
         text-align: center;
-        top: 36%; /* 717/2136 = 33.6% */
-        transform: scale(1.25); /* 添加1.25倍缩放 */
-        transform-origin: center top; /* 从顶部中心开始缩放 */
+        top: 34%; 
     }
     
     #header {
-        width: 38.3%; /* 1225/3200 = 38.3% */
+        width: 58.3%;
         margin: 0 auto;
         font-family: 'Alibaba PuHuiTi', sans-serif;
-        font-size: 7.1vw; /* 228/3200 = 7.1% */
+        font-size: 9.1vw; /* 228/3200 = 7.1% */
         font-weight: 500;
         text-transform: uppercase;
         letter-spacing: 0.05em; /* 5% */
         line-height: 100%;
-        margin-bottom: 1.5vh;
+        margin-bottom: 1.7vh;
         letter-spacing: 0.25vw;
     }
     
     #subtitle {
         font-family: 'Alibaba PuHuiTi', sans-serif;
-        font-size: 2.5vw; /* 228*0.351/3200 = 2.5% */
+        font-size: 2.8vw; 
         font-weight: 400;
         letter-spacing: 0.3em; /* 30% */
         line-height: 100%;
@@ -287,10 +282,10 @@
     
     #desc {
         position: absolute;
-        top: 5.1%; /* 105/2136 = 4.9% */
-        left: 55%; /* 水平居中 */
+        top: 5.2%; /* 105/2136 = 4.9% */
+        left: 50%; /* 水平居中 */
         transform: translateX(-50%); /* 精确居中 */
-        width: 55%; /* 1615/3200 = 50.5% */
+        width: 60%; 
         font-family: 'Alibaba PuHuiTi', sans-serif;
         text-align: center;
         z-index: 10;
@@ -301,16 +296,16 @@
     
     .desc-cn {
         font-weight: 500;
-        font-size: 2vw; /* 1.6vw * 1.25 */
+        font-size: 1.5vw; 
         line-height: 100%;
         letter-spacing: 0.15em;
-        margin-bottom: 1vh; /* 添加底部间距 */
+        margin-bottom: 1.2vh; /* 添加底部间距 */
         margin-top: 0;
     }
     
     .desc-en {
         font-weight: 400;
-        font-size: 1.625vw; /* 1.3vw * 1.25 */
+        font-size: 1.15vw; 
         line-height: 100%;
         letter-spacing: 0.15em;
         margin-top: 0;
@@ -349,7 +344,7 @@
     
     .start-button {
         position: absolute;
-        top: 68.3%; /* 1437/2136 = 67.3% */
+        top: 70%; /* 1437/2136 = 67.3% */
         left: 50%;
         transform: translateX(-50%);
         width: 29.5%; /* 增加宽度 */
@@ -381,117 +376,7 @@
         font-weight: bold;
         letter-spacing: 0.75pt;
     }
-    #nav a {
-        /*margin-left: 5px;
-        margin-right: 5px;
-        cursor: default;
-        text-decoration: none;
-        padding-bottom: 4px;*/
-    }
-    #nav a:hover {
-        /*color: white;
-        border-color: white;
-        border-bottom: 1px solid;*/
-    }
-    #nav .inactive {
-        /*color: rgba(255, 255, 255, 0.7);
-        cursor: pointer;
-        border-color: rgba(255, 255, 255, 0);
-        border-bottom: none;*/
-    }
-    #nav .active {
-        /*border-bottom: 1px solid;*/
-    }
-    #nav .spacer {
-        position: relative;
-        top: 9px;
-    }
 
-    /*#gradient-top, #gradient-bottom {
-        position: absolute;
-        width: 100%;
-        background-size: auto 100%;
-    }
-    #gradient-top {
-        top: 0;
-        height: 100px;
-        background-image: url('img/gradient_top_1pixel.png');
-    }
-    #gradient-bottom {
-        bottom: 0;
-        height: 150px;
-        background-image: url('img/gradient_bottom_1pixel.png');
-    }*/
-
-    #chrome-experiment {
-        color: white;
-        position: absolute;
-        bottom: 0px;
-        left: 0;
-        padding-left: 1em;
-        padding-bottom: 1em;
-        width: 250px;
-    }
-    @media (max-width: 400px) {
-        #chrome-experiment {
-            padding-bottom: 14px;
-            width: 170px;
-        }
-    }
-
-    #privacy-terms {
-        position: absolute;
-        bottom: 0px;
-        right: 0px;
-        /*padding: 0 1em 1em 0;*/
-        padding: 0 16px 16px 0;
-        font-size: 9pt;
-        letter-spacing: 1pt;
-        text-transform: uppercase;
-    }
-
-    #overlay-open, #overlay-close {
-        position: absolute;
-        top: 0px;
-        right: 0px;
-        color: white;
-        padding: 1em;
-        /*padding-top: 1em;*/
-
-    }
-    #overlay-close {
-        display: none;
-        padding: 1em;
-    }
-
-    #about-overlay {
-        display: none;
-        opacity: 0;
-        top: 0;
-        left: 0;
-        background-color: rgba(0, 0, 0, 0.85);
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
-    }
-    #about-overlay-content {
-        width: 60%;
-        margin: 0 auto;
-        color: #c9c9c9;
-        font-size: 10pt;
-        letter-spacing: 0.5pt;
-        line-height: 2.3;
-    }
-    #about-overlay-content a {
-        color: white;
-        text-decoration: underline;
-    }
-    #about-overlay-content p {
-        margin: 8px 0;
-        font-family: 'Roboto', sans-serif;
-    }
     .about-video {
         position: relative;
         margin-top: 50px;
@@ -509,21 +394,6 @@
         width: 100%;
         height: 100%;
     }
-    .about-heading {
-        color: white;
-        font-size: 14pt;
-        letter-spacing: 1pt;
-        text-transform: uppercase;
-        padding-top: 40px;
-    }
-    .about-heading span {
-        padding-bottom: 3px;
-        border-bottom: 1px solid white;
-    }
-    .about-tech {
-        font-weight: bold;
-        padding-top: 10px;
-    }
 
     #draw-container, #drag-container {
         display: none;
@@ -536,12 +406,12 @@
         border: none;
     }
 
-    /* 响应式设计 - PC端 */
-    @media screen and (min-width: 1025px) {
+    /* 响应式设计 - 标准PC端 */
+    @media (min-width: 1366px) and (max-width: 1599px) {
         .logo {
             width: 14%; /* 稍微缩小 */
         }
-        
+
         #desc {
             left: 50%;
             transform: translateX(-50%);
@@ -557,16 +427,22 @@
         }
 
         #title-container {
-            top: 30%;
+            top: 32%;
         }
         
         #header {
             font-size: 6.2vw;
-            margin-bottom: 3vh;
+            margin-bottom: 3.6vh;
         }
         
         #subtitle {
-            font-size: 3.4vw;
+            font-size: 2.8vw;
+        }
+
+        .start-button {
+            width: 29%;
+            height: 10.5%;
+            top: 73%;
         }
         
         .btn-cn {
@@ -576,21 +452,76 @@
         .btn-en {
             font-size: 1.2vw;
         }
+    }
+
+    /* 响应式设计 - 大屏PC端 */
+    @media (min-width: 1600px) {
+        .logo {
+            width: 12.5%; 
+        }
+
+        #desc {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+        }
+        
+        .desc-cn {
+            font-size: 1.4vw;
+        }
+        
+        .desc-en {
+            font-size: 1.15vw; 
+        }
+
+        #title-container {
+            top: 32%;
+        }
+        
+        #header {
+            font-size: 5.5vw;
+            margin-bottom: 3.2vh;
+        }
+        
+        #subtitle {
+            font-size: 2.4vw;
+        }
 
         .start-button {
-            width: 29.5%;
+            width: 25%;
             height: 10.5%;
-            top: 71.3%;
+            top: 73%;
         }
+        
+        .btn-cn {
+            font-size: 2.15vw;
+        }
+        
+        .btn-en {
+            font-size: 1.2vw;
+        }
+    }
+
+    /* 响应式设计 - 平板横屏 */
+    @media (min-width: 1024px) and (max-width: 1365px) {
+        /* .logo {
+            width: 18%; 
+        } */
+    }
+
+
+    /* 响应式设计 - PC端 */
+    @media screen and (min-width: 1025px) {
+        
+        
+        
     }
     
     /* 响应式设计 - 平板设备（基准设计） */
     @media screen and (min-width: 768px) and (max-width: 1024px) {
-        .logo {
-            width: 18%; 
-        }
+        
 
-        .btn-cn {
+        /* .btn-cn {
             font-size: 4vw;
         }
         
@@ -602,7 +533,7 @@
             width: 60%;
             height: 8%;
             bottom: 30%;
-        }
+        } */
     }
     
     /* 响应式设计 - 移动设备 */
@@ -692,65 +623,13 @@
     <iframe id="draw-container"></iframe>
     <iframe id="drag-container"></iframe>
 
-    <!-- <div id="gradient-top"></div>
-    <div id="gradient-bottom"></div> -->
-
     <div id="nav">
         <ul>
             <li><a href="javascript:void(0)" id="nav-draw"><div id="nav-draw-inner">Draw</div></a></li>
             <li><span class="spacer">|</span></li>
             <li><a href="javascript:void(0)" id="nav-drag"><div id="nav-drag-inner">Drag</div></a></li>
         </ul>
-        <!-- <a href="javascript:void(0)" id="nav-draw" class="bigger" >Draw</a> | <a href="javascript:void(0)" id="nav-drag" >Drag</a> -->
     </div>
-
-    <!-- <div id="privacy-terms">
-        <a target="_blank" href="https://www.google.com/policies/privacy/">Privacy</a> &
-        <a target="_blank" href="https://www.google.com/policies/terms/">Terms</a>
-    </div> -->
-
-    <!-- <a href="javascript:void(0)"><img id="overlay-open" src="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/question-mark@2x.png" width="25"></img></a> -->
-
-    <!-- <a href="https://www.chromeexperiments.com/" target="ce">
-        <img id="chrome-experiment" src="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/CE_badge@2x.png"></img>
-    </a> -->
-
-    <!-- <div id="about-overlay">
-        <div id="about-overlay-content">
-
-            <div class="about-video"><iframe src="https://www.youtube.com/embed/w6-LK9BOVTA?rel=0&controls=1&showinfo=0" frameborder="0" allowfullscreen></iframe></div>
-
-            <div class="about-heading"><span>About</span></div>
-            <p>Satellite images provide a wealth of visual data from which we can visualize in interesting ways. <i>Land Lines</i> is an experiment that lets you explore Google Earth satellite imagery through gesture. “Draw” to find satellite images that match your every line; “Drag” to create an infinite line of connected rivers, highways and coastlines.</p>
-
-            <p>Using a combination of machine learning, optimized algorithms, and graphics card power, the experiment is able to run efficiently on your phone’s web browser without a need for backend servers.</p>
-
-            <p>Learn more about how the project was created in this <a href="https://developers.google.com/web/showcase/2016/land-lines" target="links">technical case study</a> or browse the <a href="https://github.com/ofZach/landlines" target="links">open-source code on GitHub</a>.</p>
-
-            <div class="about-heading"><span>Technology</span></div>
-
-            <div class="about-tech">Line Detection</div>
-            <p>We used a combination of <a href="http://opencv.org/" target="links">OpenCV</a> <a href="http://docs.opencv.org/3.1.0/d0/da5/tutorial_ximgproc_prediction.html" target="links">Structured Forests</a> and <a href="http://imagej.net/Ridge_Detection" target="links">ImageJ’s Ridge Detection</a> to analyze and identify dominant visual lines in the initial dataset of 50,000+ images. This helped cull down the original dataset to just a few thousand of the most interesting images.</p>
-
-            <div class="about-tech">Fast Data Lookup</div>
-            <p>For the draw application, we stored the resulting line data in a <a href="https://github.com/fpirsch/vptree.js" target="links">vantage point tree</a>. This data structure made it fast and easy to find matches from the dataset in real time right in your phone or desktop web browser.</p>
-
-            <div class="about-tech">WebGL</div>
-            <p>We used <a href="http://www.pixijs.com/" target="links">Pixi.js</a>, an open source library built upon the WebGL API, to rapidly draw and redraw 2D WebGL graphics without hindering performance. </p>
-
-            <div class="about-tech">Google Cloud Storage</div>
-            <p>All images are hosted on <a href="https://cloud.google.com/storage/" target="links">Google Cloud Storage</a> so images are served quickly to users worldwide.  </p>
-
-            <br><br>
-            
-            <p>Made by <a href="https://www.instagram.com/zach.lieberman/" target="links">Zach Lieberman</a>, <a href="http://mattfelsen.com/" target="links">Matt Felsen</a>, and the Data Arts Team. Special thanks to <a href="http://localprojects.net/" target="links">Local Projects</a>.</p>
-
-            <p><a href="http://storage.googleapis.com/navigator-media-usa/presskit/LandLines_PressKit_v1.zip" target="links">Download the Press Kit</a></p>
-
-            <br><br>
-        </div>
-    </div> -->
-    <!-- <a href="javascript:void(0)"><img id="overlay-close" src="https://storage.googleapis.com/navigator-media-usa/media/connected_line/v2/site/www/img/close@2x.png" width="25"></img></a> -->
 
     <script src="/js/third_party/dat.gui.min.js"></script>
     <script src="/draw/js/Utils.js"></script>
@@ -944,25 +823,9 @@
         */
     }
 
-    // function showAboutOverlay() {
-    //     ga('send', 'event', 'About', 'about', '');
-    //     show(document.getElementById('about-overlay'));
-    //     document.getElementById('overlay-close').style.display = 'block';
-    // }
-
-    // function hideAboutOverlay() {
-    //     hide(document.getElementById('about-overlay'));
-    //     document.getElementById('overlay-close').style.display = 'none';
-    // }
-
     function loadApp() {
         var nav = document.getElementById('nav');
         hide(nav);
-        // if (!nav.style.display)
-        //     show(nav);
-
-        // hide(document.getElementById('gradient-top'));
-        // hide(document.getElementById('gradient-bottom'));
         
         // 保留header-row元素，只隐藏landing-container中的其他元素
         var headerRow = document.querySelector('.header-row');
@@ -975,8 +838,6 @@
         
         hide(landingContainer);
         hide(document.getElementById('bg'));
-        // hide(document.getElementById('chrome-experiment'));
-        // hide(document.getElementById('privacy-terms'));
 
         if (gui) {
             gui.destroy();
@@ -1125,9 +986,7 @@
         // if the BG hasn't faded out
         if (canvas.style.display !== 'none'){
             // if the apps or about page aren't on screen
-            if (
-                // document.getElementById('about-overlay').style.display === 'none' &&
-                document.getElementById('draw-container').style.display === 'none' &&
+            if (document.getElementById('draw-container').style.display === 'none' &&
                 document.getElementById('drag-container').style.display === 'none'
                 ){
                 
@@ -1221,23 +1080,10 @@
             context.globalAlpha = 1.0;
             context.drawImage(imageObj, -w/2 + midX, -h/2 + midY, w, h);
         }
-
-      
-
-        // if (window.innerHeight > window.innerWidth)
-        //     // document.getElementById('app').style.backgroundSize = 'auto 150%'
-        // document.getElementById('bg').style.backgroundSize = 'auto 150%'
-        // else
-        //     // document.getElementById('app').style.backgroundSize = '150%'
-        // document.getElementById('bg').style.backgroundSize = '150%'
     }
-
-    // document.getElementById('about-overlay').style.display = 'none';
+    
     document.getElementById('draw-container').style.display = 'none';
     document.getElementById('drag-container').style.display = 'none';
-
-    // document.getElementById('overlay-open').onclick = showAboutOverlay;
-    // document.getElementById('overlay-close').onclick = hideAboutOverlay;
 
     document.getElementById('button-start').onclick = loadAppDraw;
     document.getElementById('nav-draw').onclick = loadAppDraw;

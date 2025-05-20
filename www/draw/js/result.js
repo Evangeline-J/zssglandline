@@ -50,48 +50,18 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function generateQRCode(imageDataUrl) {
     // 压缩图片以减小二维码复杂度
-    compressImage(imageDataUrl, 0.5).then(function(compressedImageData) {
-        // 创建一个简单的HTML查看页面
-        const viewerHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>海岸线图片查看</title>
-            <style>
-                body {
-                    margin: 0;
-                    background: #000;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                }
-                img {
-                    max-width: 100%;
-                    max-height: 100vh;
-                }
-            </style>
-        </head>
-        <body>
-            <img src="${compressedImageData}">
-        </body>
-        </html>
-        `;
-        
-        // 将HTML转换为Data URL
-        const htmlDataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(viewerHtml);
+    compressImage(imageDataUrl, 0.1).then(function(compressedImageData) {
+        // 直接使用压缩后的图片数据作为二维码内容
         
         // 生成二维码
         try {
             new QRCode(document.getElementById("qrcode"), {
-                text: htmlDataUrl,
+                text: compressedImageData,
                 width: 128,
                 height: 128,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H // 高纠错级别
+                correctLevel: QRCode.CorrectLevel.L // 低纠错级别，可存储更多数据
             });
             console.log('二维码生成成功');
         } catch (error) {
@@ -123,7 +93,7 @@ function compressImage(imgData, quality) {
                 let height = img.height;
                 
                 // 如果图片太大，进行缩小
-                const maxDimension = 600; // 降低最大尺寸以减小数据量
+                const maxDimension = 150; // 降低最大尺寸以减小数据量
                 if (width > maxDimension || height > maxDimension) {
                     if (width > height) {
                         height = Math.round(height * (maxDimension / width));
@@ -137,7 +107,7 @@ function compressImage(imgData, quality) {
                 canvas.width = width;
                 canvas.height = height;
                 ctx.drawImage(img, 0, 0, width, height);
-                resolve(canvas.toDataURL('image/jpeg', quality || 0.5));
+                resolve(canvas.toDataURL('image/jpeg', quality || 0.1));
             } catch (error) {
                 reject(error);
             }

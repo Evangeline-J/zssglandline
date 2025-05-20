@@ -2190,85 +2190,310 @@ function getUrlParameter(name) {
 // 保存图片功能
 document.getElementById('button-save').addEventListener('click', function() {
     console.log('保存图片按钮被点击');
+    
+    // 检查sprites数组和textureHasLoaded状态
+    console.log('sprites.length =', sprites.length, 'textureHasLoaded =', textureHasLoaded);
+    
     // 确保有匹配的图片
-    // if (sprites.length === 0 || !textureHasLoaded) {
-    //     console.error('没有可保存的图片');
-    //     return;
-    // }
+    if (sprites.length === 0 || !textureHasLoaded) {
+        console.error('没有可保存的图片');
+        alert('没有可保存的图片，请先画线匹配图片');
+        return;
+    }
     
-    // // 创建一个临时canvas来绘制当前图片
-    // var canvas = document.createElement('canvas');
-    // var ctx = canvas.getContext('2d');
-    
-    // // 获取最后一个sprite（当前匹配的图片）
-    // var sprite = sprites[sprites.length - 1];
-    
-    // // 获取图片的URL
-    // var imgUrl = sprite.texture.baseTexture.source.src;
-    // var imgId = imgUrl.split('/').pop().split('.')[0];
-    
-    // // 创建一个新的Image对象
-    // var img = new Image();
-    // img.crossOrigin = 'Anonymous'; // 处理跨域问题
-    
-    // img.onload = function() {
-    //     // 设置canvas尺寸为图片原始尺寸
-    //     canvas.width = img.width;
-    //     canvas.height = img.height;
+    try {
+        // 获取最后一个sprite（当前匹配的图片）
+        var sprite = sprites[sprites.length - 1];
+        console.log('获取到sprite:', sprite);
         
-    //     // 绘制图片到canvas
-    //     ctx.drawImage(img, 0, 0);
+        // 获取图片的URL和ID
+        var imgUrl = sprite.texture.baseTexture.source.src;
+        var imgId = imgUrl.split('/').pop().split('.')[0];
+        console.log('图片URL:', imgUrl, '图片ID:', imgId);
         
-    //     // 将canvas转换为数据URL
-    //     var dataURL = canvas.toDataURL('image/jpeg', 0.95);
+        // 检查QRCode库是否加载
+        if (typeof QRCode === 'undefined') {
+            console.error('QRCode库未加载');
+            alert('QRCode库未加载，请刷新页面重试');
+            return;
+        }
         
-    //     // 创建下载链接
-    //     var link = document.createElement('a');
-    //     link.href = dataURL;
-    //     link.download = '海岸线_' + imgId + '.jpg';
+        console.log('尝试打开新窗口');
+        // 创建一个新窗口来显示结果页面
+        var resultWindow = window.open('about:blank', '_blank');
         
-    //     // 模拟点击下载
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     document.body.removeChild(link);
+        // 检查窗口是否被拦截
+        if (!resultWindow || resultWindow.closed || typeof resultWindow.closed === 'undefined') {
+            console.error('弹出窗口被拦截');
+            alert('请允许弹出窗口以查看保存的图片');
+            return;
+        }
         
-    //     // 记录事件
-    //     if (typeof ga === 'function') {
-    //         ga('send', 'event', 'Draw', 'save_image', imgId);
-    //     }
-    // };
-    
-    // img.onerror = function() {
-    //     console.error('图片加载失败:', imgUrl);
+        console.log('新窗口创建成功');
         
-    //     // 尝试直接使用当前渲染的场景作为备选
-    //     try {
-    //         // 创建一个新的canvas，大小与当前视图相同
-    //         canvas.width = renderer.view.width;
-    //         canvas.height = renderer.view.height;
+        // 创建一个临时canvas来捕获图片
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        var img = sprite.texture.baseTexture.source;
+        
+        // 设置canvas尺寸
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        // 绘制图片到canvas
+        ctx.drawImage(img, 0, 0);
+        
+        // 获取图片的Data URL
+        var imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        
+        // 压缩图片以减小二维码复杂度
+        compressImage(imageDataUrl, 0.7).then(function(compressedImageData) {
+            // 创建一个简单的HTML查看页面
+            var viewerHtml = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>海岸线图片查看</title>
+                <style>
+                    body {
+                        margin: 0;
+                        background: #000;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                    }
+                    img {
+                        max-width: 100%;
+                        max-height: 100vh;
+                    }
+                </style>
+            </head>
+            <body>
+                <img src="${compressedImageData}">
+            </body>
+            </html>
+            `;
             
-    //         // 将当前渲染的场景绘制到canvas
-    //         renderer.extract.canvas(stage).then(function(extractedCanvas) {
-    //             ctx.drawImage(extractedCanvas, 0, 0);
+            // 将HTML转换为Data URL
+            var htmlDataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(viewerHtml);
+            
+            // 创建结果页面HTML
+            var resultHtml = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>海岸线 - 保存图片</title>
+                <style>
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        background-color: #000;
+                        color: white;
+                        font-family: 'Alibaba PuHuiTi', sans-serif;
+                        overflow: hidden;
+                        width: 100vw;
+                        height: 100vh;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        position: relative;
+                    }
+                    
+                    .logo-container {
+                        position: absolute;
+                        top: 20px;
+                        left: 20px;
+                        z-index: 10;
+                    }
+                    
+                    .logo {
+                        height: 40px;
+                    }
+                    
+                    .image-container {
+                        width: 80%;
+                        height: 70%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin-top: 60px;
+                        position: relative;
+                    }
+                    
+                    .matched-image {
+                        max-width: 100%;
+                        max-height: 100%;
+                        object-fit: contain;
+                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+                    }
+                    
+                    .location-info {
+                        position: absolute;
+                        bottom: 120px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        text-align: center;
+                        width: 100%;
+                    }
+                    
+                    .location-name {
+                        font-size: 36px;
+                        font-weight: bold;
+                        margin-bottom: 5px;
+                    }
+                    
+                    .location-country {
+                        font-size: 18px;
+                        margin-bottom: 10px;
+                    }
+                    
+                    .location-coords {
+                        font-size: 16px;
+                    }
+                    
+                    .back-button {
+                        position: absolute;
+                        bottom: 30px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background-color: rgba(58, 58, 58, 0.6);
+                        border: 1px solid white;
+                        border-radius: 30px;
+                        color: white;
+                        padding: 10px 40px;
+                        font-size: 18px;
+                        cursor: pointer;
+                        text-align: center;
+                    }
+                    
+                    .countdown {
+                        position: absolute;
+                        bottom: 10px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        font-size: 14px;
+                    }
+                    
+                    .qrcode-container {
+                        position: absolute;
+                        bottom: 30px;
+                        right: 30px;
+                        background-color: white;
+                        padding: 10px;
+                        border-radius: 5px;
+                    }
+                    
+                    .qrcode-text {
+                        color: black;
+                        font-size: 12px;
+                        text-align: center;
+                        margin-top: 5px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="logo-container">
+                    <img src="/img/home/blue_up_logo.png" class="logo" alt="Logo">
+                </div>
                 
-    //             // 将canvas转换为数据URL
-    //             var dataURL = canvas.toDataURL('image/jpeg', 0.95);
+                <div class="image-container">
+                    <img src="${imageDataUrl}" class="matched-image" alt="Matched Coastline">
+                </div>
                 
-    //             // 创建下载链接
-    //             var link = document.createElement('a');
-    //             link.href = dataURL;
-    //             link.download = '海岸线_场景_' + imgId + '.jpg';
+                <div class="location-info">
+                    <div class="location-name">${matchedMetadata['line-1'] || '巴厘岛'}</div>
+                    <div class="location-country">${matchedMetadata['line-2'] || '印度尼西亚'}</div>
+                    <div class="location-coords">${document.getElementById('coordinates').innerText || "8°41'S 115°16'E"}</div>
+                </div>
                 
-    //             // 模拟点击下载
-    //             document.body.appendChild(link);
-    //             link.click();
-    //             document.body.removeChild(link);
-    //         });
-    //     } catch (e) {
-    //         console.error('保存场景失败:', e);
-    //     }
-    // };
+                <div class="back-button" onclick="window.close()">返回首页<br>BACK TO HOME</div>
+                <div class="countdown">30S</div>
+                
+                <div class="qrcode-container">
+                    <div id="qrcode"></div>
+                    <div class="qrcode-text">扫码保存属于你的共绘海岸线</div>
+                </div>
+                
+                <script>
+                    // 倒计时功能
+                    let seconds = 30;
+                    const countdownElement = document.querySelector('.countdown');
+                    
+                    const interval = setInterval(() => {
+                        seconds--;
+                        countdownElement.textContent = seconds + 'S';
+                        
+                        if (seconds <= 0) {
+                            clearInterval(interval);
+                            window.close();
+                        }
+                    }, 1000);
+                    
+                    // 生成二维码
+                    const qrcode = new QRCode(document.getElementById("qrcode"), {
+                        text: "${htmlDataUrl}",
+                        width: 128,
+                        height: 128,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                </script>
+            </body>
+            </html>
+            `;
+            
+            // 写入HTML到新窗口
+            resultWindow.document.write(resultHtml);
+            resultWindow.document.close();
+            
+            // 记录事件
+            if (typeof ga === 'function') {
+                ga('send', 'event', 'Draw', 'save_image', imgId);
+            }
+        });
+    } catch (error) {
+        console.error('保存图片时发生错误:', error);
+        alert('保存图片时发生错误: ' + error.message);
+    }
     
-    // // 设置图片源
-    // img.src = imgUrl;
 });
+
+// 图片压缩函数
+function compressImage(imgData, quality) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // 计算新尺寸，保持宽高比
+            let width = img.width;
+            let height = img.height;
+            
+            // 如果图片太大，进行缩小
+            const maxDimension = 800;
+            if (width > maxDimension || height > maxDimension) {
+                if (width > height) {
+                    height = Math.round(height * (maxDimension / width));
+                    width = maxDimension;
+                } else {
+                    width = Math.round(width * (maxDimension / height));
+                    height = maxDimension;
+                }
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', quality || 0.7));
+        };
+        img.src = imgData;
+    });
+}

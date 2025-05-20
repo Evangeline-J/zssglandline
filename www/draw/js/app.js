@@ -2211,26 +2211,6 @@ document.getElementById('button-save').addEventListener('click', function() {
         var imgId = imgUrl.split('/').pop().split('.')[0];
         console.log('图片URL:', imgUrl, '图片ID:', imgId);
         
-        // 检查QRCode库是否加载
-        if (typeof QRCode === 'undefined') {
-            console.error('QRCode库未加载');
-            alert('QRCode库未加载，请刷新页面重试');
-            return;
-        }
-        
-        console.log('尝试打开新窗口');
-        // 创建一个新窗口来显示结果页面
-        var resultWindow = window.open('about:blank', '_blank');
-        
-        // 检查窗口是否被拦截
-        if (!resultWindow || resultWindow.closed || typeof resultWindow.closed === 'undefined') {
-            console.error('弹出窗口被拦截');
-            alert('请允许弹出窗口以查看保存的图片');
-            return;
-        }
-        
-        console.log('新窗口创建成功');
-        
         // 创建一个临时canvas来捕获图片
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
@@ -2245,6 +2225,20 @@ document.getElementById('button-save').addEventListener('click', function() {
         
         // 获取图片的Data URL
         var imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        
+        // 将图片数据和位置信息存储到localStorage
+        localStorage.setItem('savedImageData', imageDataUrl);
+        localStorage.setItem('locationName', matchedMetadata['line-1'] || '巴厘岛');
+        localStorage.setItem('locationCountry', matchedMetadata['line-2'] || '印度尼西亚');
+        localStorage.setItem('coordinates', document.getElementById('coordinates').innerText || "8°41'S 115°16'E");
+        
+        // 记录事件
+        if (typeof ga === 'function') {
+            ga('send', 'event', 'Draw', 'save_image', imgId);
+        }
+        
+        // 跳转到结果页面
+        window.location.href = 'result.html';
         
         // 压缩图片以减小二维码复杂度
         compressImage(imageDataUrl, 0.7).then(function(compressedImageData) {

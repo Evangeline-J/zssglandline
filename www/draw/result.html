@@ -123,20 +123,36 @@
             font-weight: 400;
         }
         
-        .qrcode-container {
+        .qrcode-wrapper {
             position: absolute;
             bottom: 30px;
             right: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .qrcode-container {
             background-color: white;
             padding: 10px;
             border-radius: 5px;
         }
         
-        .qrcode-text {
-            color: black;
-            font-size: 12px;
+        .qrcode-description-container {
+            margin-top: 8px;
             text-align: center;
-            margin-top: 5px;
+        }
+        
+        .qrcode-text-zh {
+            color: white;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        
+        .qrcode-text-en {
+            color: white;
+            font-size: 10px;
+            font-weight: 300;
         }
         
         /* 响应式设计 */
@@ -160,9 +176,14 @@
     </a>
     <div id="countdown" class="countdown">30S</div>
     
-    <div class="qrcode-container">
-        <div id="qrcode"></div>
-        <div class="qrcode-text">扫码保存属于你的共绘海岸线</div>
+    <div class="qrcode-wrapper">
+        <div class="qrcode-container">
+            <div id="qrcode"></div>
+        </div>
+        <div class="qrcode-description-container">
+            <div class="qrcode-text-zh">扫码保存属于你的共绘海岸线</div>
+            <div class="qrcode-text-en">Scan the code to save your co-drawn coastline</div>
+        </div>
     </div>
     
     <script src="js/third_party/qrcode.min.js"></script>

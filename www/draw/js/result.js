@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 检查数据是否存在
     if (!imageDataUrl) {
         alert('没有找到图片数据，将返回首页');
-        window.location.href = 'index.html';
+        window.location.href = '../index.html';
         return;
     }
     
@@ -61,8 +61,8 @@ function generateQRCode(imageDataUrl) {
         try {
             new QRCode(document.getElementById("qrcode"), {
                 text: fullImageUrl,
-                width: 300,
-                height: 300,
+                width: 150,
+                height: 150,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.L // 低纠错级别，可存储更多数据
@@ -89,8 +89,8 @@ function generateQRCode(imageDataUrl) {
     try {
         new QRCode(document.getElementById("qrcode"), {
             text: imgUrl,
-            width: 300,
-            height: 300,
+            width: 120,
+            height: 120,
             colorDark: "#000000",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.L // 低纠错级别，可存储更多数据
@@ -160,7 +160,7 @@ function startCountdown() {
         
         if (seconds <= 0) {
             clearInterval(interval);
-            window.location.href = 'index.html'; // 倒计时结束后返回首页
+            window.location.href = '../index.html'; // 倒计时结束后返回首页
         }
     }, 1000);
     

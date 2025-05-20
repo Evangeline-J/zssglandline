@@ -49,16 +49,20 @@ document.addEventListener('DOMContentLoaded', function() {
  * @param {string} imageDataUrl - 图片的Data URL
  */
 function generateQRCode(imageDataUrl) {
-    // 压缩图片以减小二维码复杂度
-    compressImage(imageDataUrl, 0.1).then(function(compressedImageData) {
-        // 直接使用压缩后的图片数据作为二维码内容
+    // 从URL中提取图片ID
+    // 尝试从localStorage获取完整URL
+    const fullImageUrl = localStorage.getItem('fullImageUrl');
+    
+    // 如果有完整URL，直接使用
+    if (fullImageUrl) {
+        console.log('使用完整图片URL: ' + fullImageUrl);
         
         // 生成二维码
         try {
             new QRCode(document.getElementById("qrcode"), {
-                text: compressedImageData,
-                width: 128,
-                height: 128,
+                text: fullImageUrl,
+                width: 300,
+                height: 300,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.L // 低纠错级别，可存储更多数据
@@ -68,10 +72,34 @@ function generateQRCode(imageDataUrl) {
             console.error('生成二维码时出错:', error);
             document.querySelector('.qrcode-text').textContent = '二维码生成失败，请重试';
         }
-    }).catch(function(error) {
-        console.error('压缩图片时出错:', error);
-        document.querySelector('.qrcode-text').textContent = '图片处理失败，请重试';
-    });
+        return;
+    }
+    
+    // 如果没有完整URL，则使用图片ID构建URL
+    const imageId = localStorage.getItem('imageId') || '4';
+    
+    // 构建图片URL（使用与app.js中相同的格式）
+    const baseUrl = window.location.protocol + '//' + window.location.host;
+    const imgUrl = baseUrl + '/img/full/' + imageId + '.jpg';
+    
+    // 记录URL信息
+    console.log('未找到完整URL，使用构建的URL: ' + imgUrl);
+    
+    // 生成二维码
+    try {
+        new QRCode(document.getElementById("qrcode"), {
+            text: imgUrl,
+            width: 300,
+            height: 300,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.L // 低纠错级别，可存储更多数据
+        });
+        console.log('二维码生成成功');
+    } catch (error) {
+        console.error('生成二维码时出错:', error);
+        document.querySelector('.qrcode-text').textContent = '二维码生成失败，请重试';
+    }
 }
 
 /**
@@ -93,7 +121,7 @@ function compressImage(imgData, quality) {
                 let height = img.height;
                 
                 // 如果图片太大，进行缩小
-                const maxDimension = 150; // 降低最大尺寸以减小数据量
+                const maxDimension = 100; // 降低最大尺寸以减小数据量
                 if (width > maxDimension || height > maxDimension) {
                     if (width > height) {
                         height = Math.round(height * (maxDimension / width));

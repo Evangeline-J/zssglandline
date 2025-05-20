@@ -2226,8 +2226,10 @@ document.getElementById('button-save').addEventListener('click', function() {
         // 获取图片的Data URL
         var imageDataUrl = canvas.toDataURL('image/jpeg', 0.8);
         
-        // 将图片数据和位置信息存储到localStorage
+        // 将图片数据、URL和位置信息存储到localStorage
         localStorage.setItem('savedImageData', imageDataUrl);
+        localStorage.setItem('fullImageUrl', imgUrl); // 保存完整的图片URL
+        localStorage.setItem('imageId', imgId); // 保存图片ID
         localStorage.setItem('locationName', matchedMetadata['line-1'] || '巴厘岛');
         localStorage.setItem('locationCountry', matchedMetadata['line-2'] || '印度尼西亚');
         localStorage.setItem('coordinates', document.getElementById('coordinates').innerText || "8°41'S 115°16'E");

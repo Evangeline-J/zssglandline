@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海岸线 - 扫描结果</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: white;
+            font-family: 'Alibaba PuHuiTi', sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .image-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .matched-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .image-logo {
+            width: 43%;
+            position: absolute;
+            left: 3%;
+            bottom: 34%;
+            z-index: 3;
+        }
+        
+        .image-coords {
+            position: absolute;
+            right: 2%;
+            bottom: 34%;
+            color: white;
+            font-size: 4vw;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            z-index: 3;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="image-container">
+        <img id="matched-image" class="matched-image" alt="Matched Coastline">
+        <img id="logo-image" class="image-logo" alt="Logo">
+        <div id="image-coords" class="image-coords"></div>
+    </div>
+    
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从URL参数中获取数据
+            const urlParams = new URLSearchParams(window.location.search);
+            const imageUrl = urlParams.get('img');
+            const logoUrl = urlParams.get('logo');
+            const coords = urlParams.get('coords');
+            
+            // 设置图片、logo和坐标
+            if (imageUrl) document.getElementById('matched-image').src = decodeURIComponent(imageUrl);
+            if (logoUrl) document.getElementById('logo-image').src = decodeURIComponent(logoUrl);
+            if (coords) document.getElementById('image-coords').textContent = decodeURIComponent(coords);
+            
+        });
+    </script>
+</body>
+</html>

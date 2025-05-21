@@ -51,51 +51,44 @@ document.addEventListener('DOMContentLoaded', function() {
  * @param {string} imageDataUrl - 图片的Data URL
  */
 function generateQRCode(imageDataUrl) {
-    // 从URL中提取图片ID
-    // 尝试从localStorage获取完整URL
+    // 获取必要的信息
     const fullImageUrl = localStorage.getItem('fullImageUrl');
-    
-    // 如果有完整URL，直接使用
-    if (fullImageUrl) {
-        console.log('使用完整图片URL: ' + fullImageUrl);
-        
-        // 生成二维码
-        try {
-            new QRCode(document.getElementById("qrcode"), {
-                text: fullImageUrl,
-                width: 150,
-                height: 150,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.L // 低纠错级别，可存储更多数据
-            });
-            console.log('二维码生成成功');
-        } catch (error) {
-            console.error('生成二维码时出错:', error);
-            document.querySelector('.qrcode-text').textContent = '二维码生成失败，请重试';
-        }
-        return;
-    }
-    
-    // 如果没有完整URL，则使用图片ID构建URL
+    const coordinates = localStorage.getItem('coordinates') || "8°41'S 115°16'E";
     const imageId = localStorage.getItem('imageId') || '4';
     
-    // 构建图片URL（使用与app.js中相同的格式）
-    const baseUrl = window.location.protocol + '//' + window.location.host;
-    const imgUrl = baseUrl + '/img/full/' + imageId + '.jpg';
+    // 确定图片URL
+    let imageUrl;
+    if (fullImageUrl) {
+        imageUrl = fullImageUrl;
+        console.log('使用完整图片URL: ' + fullImageUrl);
+    } else {
+        // 如果没有完整URL，则使用图片ID构建URL
+        const baseUrl = window.location.protocol + '//' + window.location.host;
+        imageUrl = baseUrl + '/img/full/' + imageId + '.jpg';
+        console.log('未找到完整URL，使用构建的URL: ' + imageUrl);
+    }
     
-    // 记录URL信息
-    console.log('未找到完整URL，使用构建的URL: ' + imgUrl);
+    // 构建logo URL
+    const logoUrl = window.location.protocol + '//' + window.location.host + '/img/home/blue_up_logo.png';
+    
+    // 构建指向qr-result.html的URL，并附带所有参数
+    const baseUrl = window.location.protocol + '//' + window.location.host;
+    const qrUrl = baseUrl + '/draw/qr-result.html' + 
+                 '?img=' + encodeURIComponent(imageUrl) + 
+                 '&logo=' + encodeURIComponent(logoUrl) + 
+                 '&coords=' + encodeURIComponent(coordinates);
+    
+    console.log('二维码URL:', qrUrl);
     
     // 生成二维码
     try {
         new QRCode(document.getElementById("qrcode"), {
-            text: imgUrl,
-            width: 120,
-            height: 120,
+            text: qrUrl,
+            width: 150,
+            height: 150,
             colorDark: "#000000",
             colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.L // 低纠错级别，可存储更多数据
+            correctLevel: QRCode.CorrectLevel.M // 中等纠错级别，平衡数据容量和纠错能力
         });
         console.log('二维码生成成功');
     } catch (error) {

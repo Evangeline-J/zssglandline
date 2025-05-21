@@ -26,8 +26,8 @@
         }
         
         .image-container {
-            width: 60%;
-            height: 50%;
+            width: 100%;
+            height: 65%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -150,25 +150,17 @@
         
         /* 响应式设计 */
         
-        .background-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .result-container {
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-        
-        /* 确保其他内容在遮罩层之上 */
-        .image-container, .location-info, .back-button, .countdown, .qrcode-wrapper {
             position: relative;
-            z-index: 2;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1;
         }
     </style>
 </head>
 <body>
-    <div class="background-overlay">
+    <div class="result-container">
         <div class="image-container">
             <img id="matched-image" class="matched-image" alt="Matched Coastline">
         </div>

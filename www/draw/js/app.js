@@ -1786,7 +1786,7 @@ function animate() {
                 // Temporarily clear & restore img src so that gif animation resets to beginning
                 elem = document.getElementById('instruction');
                 elem.src = '../img/instruction-draw.gif';
-                elem.style.width = '65%';
+                elem.style.width = '55%';
                 elem.style.height = 'auto';
                 elem.style.display = 'block';
                 

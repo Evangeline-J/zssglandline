@@ -84,8 +84,8 @@ function generateQRCode(imageDataUrl) {
     try {
         new QRCode(document.getElementById("qrcode"), {
             text: qrUrl,
-            width: 150,
-            height: 150,
+            width: 100,
+            height: 100,
             colorDark: "#000000",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.M // 中等纠错级别，平衡数据容量和纠错能力

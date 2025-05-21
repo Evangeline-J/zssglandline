@@ -31,10 +31,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const imageId = localStorage.getItem('imageId') || '4';
     document.body.style.backgroundImage = `url('/img/full/${imageId}.jpg')`;
     
-    // 显示位置信息
-    document.getElementById('location-name').textContent = locationName || '巴厘岛';
-    document.getElementById('location-country').textContent = locationCountry || '印度尼西亚';
-    document.getElementById('location-coords').textContent = coordinates || "8°41'S 115°16'E";
+    // 显示坐标信息
+    document.getElementById('image-coords').textContent = coordinates || "8°41'S 115°16'E";
     
     // 生成二维码
     generateQRCode(imageDataUrl);

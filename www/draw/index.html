@@ -180,7 +180,7 @@
             }
         }
         #info .location {
-            font-size: 24px;
+            font-size: 2.2vw;
             font-family: 'Alibaba PuHuiTi', sans-serif;
             font-weight: 700;
             margin-bottom: 5px;
@@ -193,7 +193,7 @@
             margin-right: 10px;
         }
         #info .tag {
-            font-size: 18px;
+            font-size: 1.6vw;
             font-family: 'Alibaba PuHuiTi', sans-serif;
             font-weight: 400;
         }
@@ -271,37 +271,22 @@
             display: block;
             letter-spacing: 0.1em;
         }
-        
-        /* 响应式设计 - 保存按钮 */
-        @media screen and (min-width: 768px) and (max-width: 1024px) {
+
+        /* 响应式设计 - 标准PC端 */
+        @media (min-width: 1366px) and (max-width: 1599px) {
             .btn-cn {
-                font-size: 4vw;
+                font-size: 2.1vw;
+                margin-bottom: 0.3vh;
             }
             
             .btn-en {
-                font-size: 2.5vw;
+                font-size: 1.2vw;
             }
             
             .save-button {
-                width: 60%;
-                height: 8%;
-                bottom: 30%;
-            }
-        }
-        
-        @media screen and (max-width: 767px) {
-            .save-button {
-                width: 60%;
-                height: 6%;
-                bottom: 18%;
-            }
-            
-            .btn-cn {
-                font-size: 4vw;
-            }
-            
-            .btn-en {
-                font-size: 2.5vw;
+                width: 28%;
+                height: 8.5%;
+                top: 84%;
             }
         }
     </style>

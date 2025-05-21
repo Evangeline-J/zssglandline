@@ -114,7 +114,7 @@
         .qrcode-wrapper {
             position: absolute;
             bottom: 2%;
-            right: 3%;
+            right: 2%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -142,14 +142,62 @@
             font-size: 0.9vw;
         }
         
-        /* 响应式设计 */
-        
         .result-container {
             width: 100%;
             height: 100%;
             position: relative;
             background: rgba(0, 0, 0, 0.6);
             z-index: 1;
+        }
+
+        /* 响应式设计 - 标准PC端 */
+        @media (min-width: 1366px) and (max-width: 1599px) {
+            .image-container {
+                height: 65%;
+            }
+
+            .image-logo {
+                width: 25%;
+                left: 16%;
+                bottom: 5%;
+            }
+
+            .image-coords {
+                right: 16%;
+                bottom: 5%;
+                font-size: 1.8vw;
+            }
+
+            .back-zh {
+                font-size: 2vw;
+                margin-bottom: 0.3vh;
+            }
+            
+            .back-en {
+                font-size: 1.1vw;
+            }
+            
+            .back-button {
+                width: 26.5%;
+                height: 8.5%;
+                top: 83%;
+            }
+
+            .qrcode-description-container {
+                margin-top: 8%;
+            }
+
+            .qrcode-text-zh {
+                font-size: 1.2vw;
+            }
+
+            .qrcode-text-en {
+                font-size: 0.8vw;
+            }
+
+            .countdown {
+                font-size: 1.2vw;
+            }
         }
     </style>
 </head>

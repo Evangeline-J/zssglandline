@@ -32,7 +32,7 @@
             background-color: transparent;
         }
         
-        .matched-image {
+        .composed-image {
             width: 100%;
             height: auto;
             object-fit: contain;
@@ -40,38 +40,35 @@
             box-shadow: none;
         }
         
-        .image-logo {
-            width: 25%;
+        /* 隐藏加载中的提示，直到图片合成完成 */
+        .loading-text {
             position: absolute;
-            left: 5%;
-            bottom: 5%;
-            z-index: 3;
-        }
-        
-        .image-coords {
-            position: absolute;
-            right: 5%;
-            bottom: 5%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: white;
-            font-size: 2vw;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-            z-index: 3;
+            font-size: 18px;
+            text-align: center;
         }
         
+        /* 隐藏Canvas元素 */
+        #compositionCanvas {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="image-container">
-        <img id="matched-image" class="matched-image" alt="Matched Coastline">
-        <img id="logo-image" class="image-logo" alt="Logo">
-        <div id="image-coords" class="image-coords"></div>
+        <img id="composed-image" class="composed-image" alt="Composed Coastline Image" style="display: none;">
+        <div id="loading-text" class="loading-text">图片合成中，请稍候...</div>
+        <canvas id="compositionCanvas"></canvas>
     </div>
     
     <script>
-        // 使用Canvas合成图片并下载
-        function composeAndDownloadImage(mainImgSrc, logoImgSrc, coordsText) {
-            // 创建一个隐藏的canvas元素
-            const canvas = document.createElement('canvas');
+        // 使用Canvas合成图片并显示
+        function composeAndDisplayImage(mainImgSrc, logoImgSrc, coordsText) {
+            // 获取Canvas元素
+            const canvas = document.getElementById('compositionCanvas');
             const ctx = canvas.getContext('2d');
             
             // 加载主图片
@@ -92,7 +89,7 @@
                 
                 logoImg.onload = function() {
                     // 计算logo位置（左下角）
-                    const logoWidth = canvas.width * 0.25; // logo宽度为canvas宽度的25%
+                    const logoWidth = canvas.width * 0.42; // logo宽度为canvas宽度的42%
                     const logoHeight = logoWidth * (logoImg.height / logoImg.width); // 保持宽高比
                     const logoX = canvas.width * 0.05; // 左边距为canvas宽度的5%
                     const logoY = canvas.height - logoHeight - canvas.height * 0.05; // 底部边距为canvas高度的5%
@@ -101,7 +98,7 @@
                     ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
                     
                     // 绘制坐标文本
-                    ctx.font = `bold ${canvas.width * 0.04}px 'Alibaba PuHuiTi', sans-serif`;
+                    ctx.font = `bold ${canvas.width * 0.05}px 'Alibaba PuHuiTi', sans-serif`;
                     ctx.fillStyle = 'white';
                     ctx.textAlign = 'right';
                     ctx.textBaseline = 'bottom';
@@ -120,13 +117,13 @@
                     // 将canvas转换为图片URL
                     const composedImageUrl = canvas.toDataURL('image/jpeg', 0.9);
                     
-                    // 创建一个下载链接
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = composedImageUrl;
-                    downloadLink.download = 'coastline-' + coordsText.replace(/[^\w\s]/gi, '') + '.jpg'; // 文件名
+                    // 显示合成后的图片
+                    const composedImage = document.getElementById('composed-image');
+                    composedImage.src = composedImageUrl;
+                    composedImage.style.display = 'block';
                     
-                    // 自动触发下载
-                    downloadLink.click();
+                    // 隐藏加载提示
+                    document.getElementById('loading-text').style.display = 'none';
                 };
                 
                 logoImg.src = logoImgSrc;
@@ -148,21 +145,12 @@
             const decodedLogoUrl = logoUrl ? decodeURIComponent(logoUrl) : '';
             const decodedCoords = coords ? decodeURIComponent(coords) : '';
             
-            // 设置图片、logo和坐标
-            if (decodedImageUrl) document.getElementById('matched-image').src = decodedImageUrl;
-            if (decodedLogoUrl) document.getElementById('logo-image').src = decodedLogoUrl;
-            if (decodedCoords) document.getElementById('image-coords').textContent = decodedCoords;
-            
-            // 检查是否所有资源都已加载
-            window.addEventListener('load', function() {
-                // 延迟一小段时间确保图片已完全加载
-                setTimeout(function() {
-                    // 合成并下载图片
-                    if (decodedImageUrl && decodedLogoUrl && decodedCoords) {
-                        composeAndDownloadImage(decodedImageUrl, decodedLogoUrl, decodedCoords);
-                    }
-                }, 1000);
-            });
+            // 合成并显示图片
+            if (decodedImageUrl && decodedLogoUrl && decodedCoords) {
+                composeAndDisplayImage(decodedImageUrl, decodedLogoUrl, decodedCoords);
+            } else {
+                document.getElementById('loading-text').textContent = '参数不完整，无法显示图片';
+            }
         });
     </script>
 </body>

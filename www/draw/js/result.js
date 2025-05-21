@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const matchedImage = document.getElementById('matched-image');
     matchedImage.src = imageDataUrl;
     
+    // 设置背景为原始图片
+    const imageId = localStorage.getItem('imageId') || '4';
+    document.body.style.backgroundImage = `url('/img/full/${imageId}.jpg')`;
+    
     // 显示位置信息
     document.getElementById('location-name').textContent = locationName || '巴厘岛';
     document.getElementById('location-country').textContent = locationCountry || '印度尼西亚';

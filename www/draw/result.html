@@ -19,17 +19,10 @@
             flex-direction: column;
             align-items: center;
             position: relative;
-        }
-        
-        .logo-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 10;
-        }
-        
-        .logo {
-            height: 40px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
         
         .image-container {
@@ -157,32 +150,49 @@
         
         /* 响应式设计 */
         
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        
+        /* 确保其他内容在遮罩层之上 */
+        .image-container, .location-info, .back-button, .countdown, .qrcode-wrapper {
+            position: relative;
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
-    <div class="image-container">
-        <img id="matched-image" class="matched-image" alt="Matched Coastline">
-    </div>
-    
-    <div class="location-info">
-        <div id="location-name" class="location-name"></div>
-        <div id="location-country" class="location-country"></div>
-        <div id="location-coords" class="location-coords"></div>
-    </div>
-    
-    <a href="../index.html" class="back-button">
-        <span class="back-zh">返回首页</span>
-        <span class="back-en">BACK TO HOME</span>
-    </a>
-    <div id="countdown" class="countdown">30S</div>
-    
-    <div class="qrcode-wrapper">
-        <div class="qrcode-container">
-            <div id="qrcode"></div>
+    <div class="background-overlay">
+        <div class="image-container">
+            <img id="matched-image" class="matched-image" alt="Matched Coastline">
         </div>
-        <div class="qrcode-description-container">
-            <div class="qrcode-text-zh">扫码保存属于你的共绘海岸线</div>
-            <div class="qrcode-text-en">Scan the code to save your co-drawn coastline</div>
+        
+        <div class="location-info">
+            <div id="location-name" class="location-name"></div>
+            <div id="location-country" class="location-country"></div>
+            <div id="location-coords" class="location-coords"></div>
+        </div>
+        
+        <a href="../index.html" class="back-button">
+            <span class="back-zh">返回首页</span>
+            <span class="back-en">BACK TO HOME</span>
+        </a>
+        <div id="countdown" class="countdown">30S</div>
+        
+        <div class="qrcode-wrapper">
+            <div class="qrcode-container">
+                <div id="qrcode"></div>
+            </div>
+            <div class="qrcode-description-container">
+                <div class="qrcode-text-zh">扫码保存属于你的共绘海岸线</div>
+                <div class="qrcode-text-en">Scan the code to save your co-drawn coastline</div>
+            </div>
         </div>
     </div>
     

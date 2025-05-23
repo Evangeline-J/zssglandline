@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: white;
+            font-family: 'Alibaba PuHuiTi', sans-serif;
+            overflow-x: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            z-index: 100;
+        }
+        
+        .logo-image {
+            height: 40px;
+        }
+        
+        .logo-text {
+            color: white;
+            margin-left: 10px;
+            font-size: 18px;
+        }
+        
+        .back-home {
+            padding: 10px 20px;
+            background-color: rgba(58, 58, 58, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .back-zh {
+            font-size: 16px;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 2px;
+        }
+        
+        .back-en {
+            font-size: 12px;
+            font-weight: 400;
+            display: block;
+        }
+        
+        .back-previous {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            z-index: 100;
+        }
+        
+        .back-previous:before {
+            content: '←';
+            margin-right: 5px;
+            font-size: 20px;
+        }
+        
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60vh;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+        
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .content-container {
+            position: absolute;
+            top: 60vh;
+            left: 0;
+            width: 100%;
+            min-height: 40vh;
+            background-color: #000;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 2;
+        }
+        
+        .content-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        .content-description {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .scroll-indicator {
+            text-align: center;
+            margin-top: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        .scroll-indicator-text {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .scroll-indicator-arrow:after {
+            content: '↓';
+            font-size: 24px;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="../index.html" class="back-home">
+            <span class="back-zh">返回首页</span>
+            <span class="back-en">BACK TO HOME</span>
+        </a>
+    </div>
+    
+    <a href="result.html" class="back-previous">返回上一页</a>
+    
+    <div class="video-container">
+        <video id="main-video" autoplay muted loop playsinline></video>
+    </div>
+    
+    <div class="content-container">
+        <h1 class="content-title">盘锦湿地保护协会</h1>
+        <div class="content-description">
+            <p>盘锦湿地保护协会是旨在宣传和保护辽河入海口湿地生态环境和生物多样性的环保NGO。2019年注册，主管单位为盘锦市林业和湿地保护管理局，前身是2007年创立的盘锦保护斑海豹志愿者协会，2020年被评为4A级社团。</p>
+            <p>协会长期致力于湿地生态系统的保护和修复工作，组织开展了多项湿地保护活动，包括湿地监测、生物多样性调查、环境教育和公众参与等。</p>
+            <p>通过与政府部门、科研机构和其他社会组织的合作，协会在湿地保护领域取得了显著成果，为维护辽河入海口湿地生态系统的健康和稳定做出了重要贡献。</p>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-indicator-text">下滑阅读更多</div>
+            <div class="scroll-indicator-arrow"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从localStorage获取选中的视频
+            const selectedVideo = localStorage.getItem('selectedVideo');
+            
+            // 设置视频源
+            const videoElement = document.getElementById('main-video');
+            if (selectedVideo) {
+                videoElement.src = selectedVideo;
+            } else {
+                // 如果没有选中的视频，使用默认视频
+                videoElement.src = '../video/System03_Extraction_Hauling.mp4';
+            }
+            
+            // 视频加载错误处理
+            videoElement.addEventListener('error', function() {
+                console.error('视频加载失败');
+                // 使用备用视频
+                videoElement.src = '../video/System03_Extraction_Hauling.mp4';
+            });
+            
+            // 记录事件（如果GA可用）
+            if (typeof ga === 'function') {
+                ga('send', 'event', 'Video', 'view_detail');
+            }
+        });
+    </script>
+</body>
+</html>

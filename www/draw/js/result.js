@@ -8,6 +8,44 @@
  * 4. 实现倒计时功能
  */
 
+// 随机选择视频函数
+function getRandomVideo() {
+    // 视频文件列表
+    const videos = [
+        '../video/2024_End_of_Year_Video.mov',
+        '../video/Pan_Jin.mov',
+        '../video/System03_Extraction_Hauling.mp4'
+    ];
+    
+    // 随机选择一个视频
+    const randomIndex = Math.floor(Math.random() * videos.length);
+    return videos[randomIndex];
+}
+
+// 设置视频浮窗
+function setupVideoPopup() {
+    // 随机选择一个视频
+    const selectedVideo = getRandomVideo();
+    
+    // 存储选中的视频路径到localStorage
+    localStorage.setItem('selectedVideo', selectedVideo);
+    
+    // 设置视频预览图（使用视频对应的图片）
+    // 这里我们使用一个固定的预览图，实际应用中可以为每个视频设置对应的预览图
+    document.getElementById('video-preview').src = '../img/full/300.jpg';
+    
+    // 点击视频预览图导航到详情页
+    document.querySelector('.video-thumbnail').addEventListener('click', function() {
+        window.location.href = 'video-detail.html';
+    });
+    
+    // 点击"查看更多"导航到详情页
+    document.querySelector('.view-more').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = 'video-detail.html';
+    });
+}
+
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
     // 从localStorage读取数据
@@ -44,6 +82,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typeof ga === 'function') {
         ga('send', 'event', 'Draw', 'view_saved_image');
     }
+    
+    // 设置视频浮窗
+    setupVideoPopup();
 });
 
 /**

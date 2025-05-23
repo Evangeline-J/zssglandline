@@ -22,6 +22,76 @@ function getRandomVideo() {
     return videos[randomIndex];
 }
 
+/**
+ * 从视频中提取第一帧作为缩略图
+ * @param {string} videoSrc - 视频文件路径
+ * @returns {Promise<string>} 缩略图的Data URL
+ */
+function extractVideoThumbnail(videoSrc) {
+    return new Promise((resolve, reject) => {
+        // 创建一个隐藏的video元素
+        const video = document.createElement('video');
+        video.style.display = 'none';
+        video.crossOrigin = 'anonymous'; // 允许跨域加载视频
+        video.muted = false; // 静音
+        video.playsInline = true; // 内联播放
+        
+        // 监听视频数据加载完成事件
+        video.addEventListener('loadeddata', function() {
+            try {
+                // 暂停视频，确保我们获取的是第一帧
+                video.pause();
+                
+                // 创建canvas元素
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                
+                // 将视频的第一帧绘制到canvas上
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // 将canvas转换为图片URL
+                const thumbnailUrl = canvas.toDataURL('image/jpeg', 0.8);
+                
+                // 移除video元素
+                document.body.removeChild(video);
+                
+                // 返回缩略图URL
+                resolve(thumbnailUrl);
+            } catch (error) {
+                reject(error);
+            }
+        });
+        
+        // 监听错误事件
+        video.addEventListener('error', function() {
+            if (document.body.contains(video)) {
+                document.body.removeChild(video);
+            }
+            reject(new Error('视频加载失败'));
+        });
+        
+        // 设置视频源并加载
+        video.src = videoSrc;
+        
+        // 将video元素添加到DOM中（隐藏）
+        document.body.appendChild(video);
+        
+        // 尝试播放视频以加载数据
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.error('视频播放失败:', error);
+                if (document.body.contains(video)) {
+                    document.body.removeChild(video);
+                }
+                reject(error);
+            });
+        }
+    });
+}
+
 // 设置视频浮窗
 function setupVideoPopup() {
     // 随机选择一个视频
@@ -30,9 +100,17 @@ function setupVideoPopup() {
     // 存储选中的视频路径到localStorage
     localStorage.setItem('selectedVideo', selectedVideo);
     
-    // 设置视频预览图（使用视频对应的图片）
-    // 这里我们使用一个固定的预览图，实际应用中可以为每个视频设置对应的预览图
-    document.getElementById('video-preview').src = '../img/full/300.jpg';
+    // 从视频中提取第一帧作为预览图
+    extractVideoThumbnail(selectedVideo)
+        .then(thumbnailUrl => {
+            // 设置视频预览图
+            document.getElementById('video-preview').src = thumbnailUrl;
+        })
+        .catch(error => {
+            console.error('提取视频缩略图失败:', error);
+            // 如果提取失败，使用默认图片
+            document.getElementById('video-preview').src = '../img/full/300.jpg';
+        });
     
     // 点击视频预览图导航到详情页
     document.querySelector('.video-thumbnail').addEventListener('click', function() {

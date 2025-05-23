@@ -213,9 +213,10 @@
         /* 视频浮窗样式 */
         .video-popup {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 300px;
+            top: 3vh;
+            right: 2vw;
+            width: 23%;
+            padding: 0.6%;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 8px;
             overflow: hidden;
@@ -262,35 +263,44 @@
         }
 
         .video-info {
-            padding: 15px;
+            padding: 2% 0;
         }
 
         .video-title {
-            margin: 0 0 10px 0;
+            margin: 0 0 2% 0;
             color: white;
-            font-size: 18px;
+            font-size: 1.6vw;
         }
 
+        /* 视频描述容器样式 */
+        .video-description-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
         .video-description {
-            margin: 0 0 10px 0;
             color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
+            font-size: 1.1vw;
             line-height: 1.4;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            margin: 0;
+            flex: 1; /* 让描述文本占据剩余空间 */
         }
 
         .view-more {
-            color: #3a9bdc;
+            color: rgba(195, 195, 195, 1);
             text-decoration: none;
-            font-size: 14px;
-            display: inline-block;
+            font-size: 1.1vw;
+            white-space: nowrap; /* 防止文本换行 */
+            margin-left: 10px; /* 添加左侧间距 */
         }
 
         .view-more:hover {
-            text-decoration: underline;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -310,8 +320,10 @@
             </div>
             <div class="video-info">
                 <h3 class="video-title">盘锦湿地保护协会</h3>
-                <p class="video-description">盘锦湿地保护协会是旨在宣传和保护辽河入海口湿地生态环境和生物多样性的环保NGO...</p>
-                <a href="javascript:void(0);" class="view-more">查看更多</a>
+                <div class="video-description-container">
+                    <p class="video-description">盘锦湿地保护协会是旨在宣传和保护辽河入海口湿地生态环境和生物多样性的环保NGO...</p>
+                    <a href="javascript:void(0);" class="view-more">查看更多</a>
+                </div>
             </div>
         </div>
         

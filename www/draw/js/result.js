@@ -105,23 +105,32 @@ function setupVideoPopup() {
         .then(thumbnailUrl => {
             // 设置视频预览图
             document.getElementById('video-preview').src = thumbnailUrl;
+            
+            // 视频预览图加载完成后，显示video-popup容器
+            const videoPopup = document.querySelector('.video-popup');
+            videoPopup.style.display = 'block';
+            
+            // 添加淡入效果
+            setTimeout(() => {
+                videoPopup.style.opacity = '1';
+                videoPopup.style.transition = 'opacity 1s ease-in';
+            }, 10);
+            
+            // 点击视频预览图导航到详情页
+            document.querySelector('.video-thumbnail').addEventListener('click', function() {
+                window.location.href = 'video-detail.html';
+            });
+            
+            // 点击"查看更多"导航到详情页
+            document.querySelector('.view-more').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'video-detail.html';
+            });
         })
         .catch(error => {
             console.error('提取视频缩略图失败:', error);
-            // 如果提取失败，使用默认图片
-            document.getElementById('video-preview').src = '../img/full/300.jpg';
+            // 如果提取失败，不显示video-popup容器
         });
-    
-    // 点击视频预览图导航到详情页
-    document.querySelector('.video-thumbnail').addEventListener('click', function() {
-        window.location.href = 'video-detail.html';
-    });
-    
-    // 点击"查看更多"导航到详情页
-    document.querySelector('.view-more').addEventListener('click', function(e) {
-        e.preventDefault();
-        window.location.href = 'video-detail.html';
-    });
 }
 
 // 页面加载完成后执行

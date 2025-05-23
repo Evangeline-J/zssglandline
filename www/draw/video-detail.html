@@ -96,7 +96,7 @@
         
         .content-container {
             position: absolute;
-            top: 60vh;
+            top: 62vh;
             /* 水平居中 */
             left: 50%;
             transform: translateX(-50%);
@@ -133,11 +133,6 @@
             background: rgba(255, 255, 255, 0.5);
         }
         
-        .content-title {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-        
         .content-description {
             font-size: 16px;
             line-height: 1.6;
@@ -151,13 +146,14 @@
         }
         
         .scroll-indicator-text {
-            font-size: 14px;
+            font-size: 2vw;
             margin-bottom: 5px;
         }
         
-        .scroll-indicator-arrow:after {
-            content: '↓';
-            font-size: 24px;
+        .scroll-indicator-arrow {
+            width: 5vw; /* 根据实际图片尺寸调整 */
+            height: auto;
+            margin-bottom: 5px;
         }
         
         @keyframes bounce {
@@ -188,7 +184,6 @@
     </div>
     
     <div class="content-container">
-        <h1 class="content-title">盘锦湿地保护协会</h1>
         <div class="content-description">
             <p>盘锦湿地保护协会是旨在宣传和保护辽河入海口湿地生态环境和生物多样性的环保NGO。2019年注册，主管单位为盘锦市林业和湿地保护管理局，前身是2007年创立的盘锦保护斑海豹志愿者协会，2020年被评为4A级社团。</p>
             
@@ -212,8 +207,8 @@
             <p>协会定期举办"湿地保护日"、"观鸟节"等公众活动，通过科普讲座、实地考察、志愿服务等形式，提高公众对湿地保护的认识和参与度。</p>
         </div>
         <div class="scroll-indicator">
+            <img src="../img/scroll-indicator.png" class="scroll-indicator-arrow" alt="向下滚动">
             <div class="scroll-indicator-text">下滑阅读更多</div>
-            <div class="scroll-indicator-arrow"></div>
         </div>
     </div>
     

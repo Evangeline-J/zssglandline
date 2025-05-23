@@ -93,13 +93,40 @@
         .content-container {
             position: absolute;
             top: 60vh;
-            left: 0;
-            width: 100%;
+            /* 水平居中 */
+            left: 50%;
+            transform: translateX(-50%);
+            /* 宽度将由JS动态设置 */
+            width: auto;
+            max-width: 100%;
             min-height: 40vh;
+            /* 设置最大高度，并添加垂直滚动 */
+            max-height: 35vh;
+            overflow-y: auto;
+            overflow-x: hidden;
             background-color: #000;
             padding: 20px;
             box-sizing: border-box;
             z-index: 2;
+        }
+        
+        /* 自定义滚动条样式 */
+        .content-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .content-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .content-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .content-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
         
         .content-title {
@@ -159,9 +186,26 @@
     <div class="content-container">
         <h1 class="content-title">盘锦湿地保护协会</h1>
         <div class="content-description">
-            <p>盘锦湿地保护协会是旨在宣传和保护辽河入海口湿地生态环境和生物多样性的环保NGO。2019年注册，主管单位为盘锦市林业和湿地保护管理局，前身是2007年创立的盘锦保护斑海豹志愿者协会，2020年被评为4A级社团。
-            协会长期致力于湿地生态系统的保护和修复工作，组织开展了多项湿地保护活动，包括湿地监测、生物多样性调查、环境教育和公众参与等。
-            通过与政府部门、科研机构和其他社会组织的合作，协会在湿地保护领域取得了显著成果，为维护辽河入海口湿地生态系统的健康和稳定做出了重要贡献。</p>
+            <p>盘锦湿地保护协会是旨在宣传和保护辽河入海口湿地生态环境和生物多样性的环保NGO。2019年注册，主管单位为盘锦市林业和湿地保护管理局，前身是2007年创立的盘锦保护斑海豹志愿者协会，2020年被评为4A级社团。</p>
+            
+            <p>协会长期致力于湿地生态系统的保护和修复工作，组织开展了多项湿地保护活动，包括湿地监测、生物多样性调查、环境教育和公众参与等。</p>
+            
+            <p>通过与政府部门、科研机构和其他社会组织的合作，协会在湿地保护领域取得了显著成果，为维护辽河入海口湿地生态系统的健康和稳定做出了重要贡献。</p>
+            
+            <p>盘锦湿地是中国最大的芦苇湿地，也是世界上最完整的湿地生态系统之一。这里栖息着众多珍稀鸟类和水生动物，是东北亚候鸟迁徙的重要中转站和栖息地。</p>
+            
+            <p>协会的主要工作包括：</p>
+            <ul>
+                <li>湿地生态系统监测与研究</li>
+                <li>濒危物种保护与栖息地修复</li>
+                <li>环境教育与公众意识提升</li>
+                <li>可持续发展模式探索与推广</li>
+                <li>国际合作与经验交流</li>
+            </ul>
+            
+            <p>近年来，协会积极参与国际湿地保护网络，与多个国际组织建立了长期合作关系，共同推动全球湿地保护事业的发展。</p>
+            
+            <p>协会定期举办"湿地保护日"、"观鸟节"等公众活动，通过科普讲座、实地考察、志愿服务等形式，提高公众对湿地保护的认识和参与度。</p>
         </div>
         <div class="scroll-indicator">
             <div class="scroll-indicator-text">下滑阅读更多</div>
@@ -193,6 +237,38 @@
             // 记录事件（如果GA可用）
             if (typeof ga === 'function') {
                 ga('send', 'event', 'Video', 'view_detail');
+            }
+            
+            // 获取内容容器
+            const contentContainer = document.querySelector('.content-container');
+            
+            // 函数：设置内容容器宽度与视频宽度一致
+            function adjustContentWidth() {
+                // 获取视频的实际显示宽度
+                const videoRect = videoElement.getBoundingClientRect();
+                const videoWidth = videoRect.width;
+                
+                // 设置内容容器宽度
+                contentContainer.style.width = videoWidth + 'px';
+                
+                console.log('视频宽度:', videoWidth, '内容容器宽度:', contentContainer.style.width);
+            }
+            
+            // 视频元数据加载完成后调整宽度
+            videoElement.addEventListener('loadedmetadata', function() {
+                // 延迟一点执行，确保视频已经渲染
+                setTimeout(adjustContentWidth, 100);
+            });
+            
+            // 视频大小变化时调整宽度
+            videoElement.addEventListener('resize', adjustContentWidth);
+            
+            // 窗口大小改变时重新调整
+            window.addEventListener('resize', adjustContentWidth);
+            
+            // 初始调整（可能视频已经加载）
+            if (videoElement.readyState >= 1) {
+                setTimeout(adjustContentWidth, 100);
             }
         });
     </script>

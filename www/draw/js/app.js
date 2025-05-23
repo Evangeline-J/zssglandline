@@ -1753,7 +1753,9 @@ function animate() {
         if (document.getElementById("progress") != null) {
             // 创建加载动画HTML，使用loading.gif，文字在图层之上并且水平垂直居中
             var loadingHTML = '<div style="position:relative; height:auto;">' +
-                              '<img src="../img/loading.gif" style="width:100%; height:100%;">' +
+                              '<video autoplay loop muted playsinline style="width:100%; height:100%;">' +
+                              '<source src="../img/loading.mp4" type="video/mp4">' +
+                              '</video>' +
                               '<div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center; width:100%;">' +
                               '<div style="font-family:\'Alibaba PuHuiTi\', sans-serif; font-weight:400; font-size:2.5vw; margin-bottom:0.1vh; letter-spacing:0.1em;">加载中...</div>' +
                               '<div style="font-family:\'Alibaba PuHuiTi\', sans-serif; font-weight:400; font-size:1.25vw; letter-spacing:0.1em;">LOADING</div>' +

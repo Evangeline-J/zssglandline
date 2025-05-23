@@ -74,8 +74,12 @@
         .video-container {
             position: fixed;
             top: 15vh;
-            left: 0;
-            width: 100%;
+            /* 修改定位，使其水平居中 */
+            left: 50%;
+            transform: translateX(-50%);
+            /* 宽度将由JS动态设置，不再是固定的100% */
+            width: auto;
+            max-width: 100%;
             height: 45vh;
             z-index: 1;
             display: flex;
@@ -239,36 +243,54 @@
                 ga('send', 'event', 'Video', 'view_detail');
             }
             
-            // 获取内容容器
+            // 获取视频容器和内容容器
+            const videoContainer = document.querySelector('.video-container');
             const contentContainer = document.querySelector('.content-container');
             
-            // 函数：设置内容容器宽度与视频宽度一致
-            function adjustContentWidth() {
-                // 获取视频的实际显示宽度
-                const videoRect = videoElement.getBoundingClientRect();
-                const videoWidth = videoRect.width;
+            // 函数：根据视频实际宽度调整容器宽度
+            function adjustContainersWidth() {
+                // 获取视频的原始尺寸（视频的固有宽度和高度）
+                const videoWidth = videoElement.videoWidth;
+                const videoHeight = videoElement.videoHeight;
                 
-                // 设置内容容器宽度
-                contentContainer.style.width = videoWidth + 'px';
-                
-                console.log('视频宽度:', videoWidth, '内容容器宽度:', contentContainer.style.width);
+                if (videoWidth && videoHeight) {
+                    // 计算视频在容器中的实际显示宽度
+                    // 基于视频容器的高度和视频的宽高比
+                    const containerHeight = videoContainer.clientHeight;
+                    const aspectRatio = videoWidth / videoHeight;
+                    const displayWidth = containerHeight * aspectRatio;
+                    
+                    // 设置视频容器宽度
+                    videoContainer.style.width = displayWidth + 'px';
+                    
+                    // 设置内容容器宽度与视频容器一致
+                    contentContainer.style.width = displayWidth + 'px';
+                    
+                    console.log('视频原始尺寸:', videoWidth, 'x', videoHeight);
+                    console.log('视频显示宽度:', displayWidth);
+                    console.log('容器宽度:', videoContainer.style.width);
+                } else {
+                    console.log('视频尺寸尚未可用');
+                    // 如果视频尺寸尚未可用，稍后再试
+                    setTimeout(adjustContainersWidth, 100);
+                }
             }
             
             // 视频元数据加载完成后调整宽度
             videoElement.addEventListener('loadedmetadata', function() {
                 // 延迟一点执行，确保视频已经渲染
-                setTimeout(adjustContentWidth, 100);
+                setTimeout(adjustContainersWidth, 100);
             });
             
             // 视频大小变化时调整宽度
-            videoElement.addEventListener('resize', adjustContentWidth);
+            videoElement.addEventListener('resize', adjustContainersWidth);
             
             // 窗口大小改变时重新调整
-            window.addEventListener('resize', adjustContentWidth);
+            window.addEventListener('resize', adjustContainersWidth);
             
             // 初始调整（可能视频已经加载）
             if (videoElement.readyState >= 1) {
-                setTimeout(adjustContentWidth, 100);
+                setTimeout(adjustContainersWidth, 100);
             }
         });
     </script>

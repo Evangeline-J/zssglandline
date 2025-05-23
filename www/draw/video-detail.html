@@ -15,79 +15,68 @@
             width: 100vw;
             height: 100vh;
         }
-        
-        .header {
+
+        .back-home-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
+            top: 5%;
+            right: 4%;
+            width: 16%;
             z-index: 100;
         }
         
-        .logo-image {
-            height: 40px;
-        }
-        
-        .logo-text {
-            color: white;
-            margin-left: 10px;
-            font-size: 18px;
-        }
-        
         .back-home {
-            padding: 10px 20px;
+            padding: 2% 4%;
             background-color: rgba(58, 58, 58, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: 30px;
             color: white;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 1.2vw;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         
         .back-zh {
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 1.6vw;
+            font-weight: 400;
             display: block;
             margin-bottom: 2px;
+            letter-spacing: 0.2vw;
         }
         
         .back-en {
-            font-size: 12px;
+            font-size: 1.2vw;
             font-weight: 400;
             display: block;
+            letter-spacing: 0.2vw;
         }
         
         .back-previous {
             position: fixed;
-            top: 80px;
-            left: 20px;
+            top: 14vh;
+            left: 4%;
             color: white;
             text-decoration: none;
             display: flex;
             align-items: center;
-            font-size: 16px;
+            font-size: 1.6vw;
             z-index: 100;
+            font-weight: 500;
         }
         
         .back-previous:before {
-            content: '←';
+            content: '<';
             margin-right: 5px;
-            font-size: 20px;
+            font-size: 1.8vw;
         }
         
         .video-container {
             position: fixed;
-            top: 0;
+            top: 15vh;
             left: 0;
             width: 100%;
-            height: 60vh;
+            height: 45vh;
             z-index: 1;
             display: flex;
             justify-content: center;
@@ -154,14 +143,14 @@
     </style>
 </head>
 <body>
-    <div class="header">
+    <div class="back-home-container">
         <a href="../index.html" class="back-home">
             <span class="back-zh">返回首页</span>
             <span class="back-en">BACK TO HOME</span>
         </a>
     </div>
-    
-    <a href="result.html" class="back-previous">返回上一页</a>
+
+    <a href="./result.html" class="back-previous">返回上一页</a>   
     
     <div class="video-container">
         <video id="main-video" autoplay muted loop playsinline></video>
@@ -170,9 +159,9 @@
     <div class="content-container">
         <h1 class="content-title">盘锦湿地保护协会</h1>
         <div class="content-description">
-            <p>盘锦湿地保护协会是旨在宣传和保护辽河入海口湿地生态环境和生物多样性的环保NGO。2019年注册，主管单位为盘锦市林业和湿地保护管理局，前身是2007年创立的盘锦保护斑海豹志愿者协会，2020年被评为4A级社团。</p>
-            <p>协会长期致力于湿地生态系统的保护和修复工作，组织开展了多项湿地保护活动，包括湿地监测、生物多样性调查、环境教育和公众参与等。</p>
-            <p>通过与政府部门、科研机构和其他社会组织的合作，协会在湿地保护领域取得了显著成果，为维护辽河入海口湿地生态系统的健康和稳定做出了重要贡献。</p>
+            <p>盘锦湿地保护协会是旨在宣传和保护辽河入海口湿地生态环境和生物多样性的环保NGO。2019年注册，主管单位为盘锦市林业和湿地保护管理局，前身是2007年创立的盘锦保护斑海豹志愿者协会，2020年被评为4A级社团。
+            协会长期致力于湿地生态系统的保护和修复工作，组织开展了多项湿地保护活动，包括湿地监测、生物多样性调查、环境教育和公众参与等。
+            通过与政府部门、科研机构和其他社会组织的合作，协会在湿地保护领域取得了显著成果，为维护辽河入海口湿地生态系统的健康和稳定做出了重要贡献。</p>
         </div>
         <div class="scroll-indicator">
             <div class="scroll-indicator-text">下滑阅读更多</div>

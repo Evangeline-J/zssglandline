@@ -153,12 +153,12 @@ document.addEventListener('DOMContentLoaded', function() {
     matchedImage.src = imageDataUrl;
     
     // 设置背景为原始图片
-    const imageId = localStorage.getItem('imageId') || '4';
+    const imageId = localStorage.getItem('imageId') || '';
     document.body.style.backgroundImage = `url('/img/full/${imageId}.jpg')`;
     
     // 显示坐标信息
     const coordsElement = document.getElementById('image-coords');
-    const coordsText = coordinates || "8°41'S 115°16'E";
+    const coordsText = coordinates || "";
     // 根据逗号切分坐标
     if (coordsText.includes(',')) {
         const coordParts = coordsText.split(',');
@@ -196,8 +196,8 @@ document.addEventListener('DOMContentLoaded', function() {
 function generateQRCode(imageDataUrl) {
     // 获取必要的信息
     const fullImageUrl = localStorage.getItem('fullImageUrl');
-    const coordinates = localStorage.getItem('coordinates') || "8°41'S 115°16'E";
-    const imageId = localStorage.getItem('imageId') || '4';
+    const coordinates = localStorage.getItem('coordinates') || "";
+    const imageId = localStorage.getItem('imageId') || '';
     
     // 确定图片URL
     let imageUrl;
@@ -289,7 +289,7 @@ function compressImage(imgData, quality) {
  * 启动倒计时
  */
 function startCountdown() {
-    let seconds = 30;
+    let seconds = 300;
     const countdownElement = document.getElementById('countdown');
     
     const interval = setInterval(() => {

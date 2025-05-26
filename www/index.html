@@ -861,6 +861,12 @@
         var headerRow = document.querySelector('.header-row');
         var landingContainer = document.getElementById('landing-container');
         
+        // 移除desc元素，只保留logo
+        var descElement = document.getElementById('desc');
+        if (headerRow && descElement) {
+            headerRow.removeChild(descElement);
+        }
+        
         // 将header-row移动到body直接子元素，避免被隐藏
         if (headerRow && landingContainer) {
             document.body.appendChild(headerRow);

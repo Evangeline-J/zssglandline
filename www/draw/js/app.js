@@ -1863,28 +1863,14 @@ function animate() {
         //drawing.alpha = drawingAlpha;
 
         if (!matched) {
-
-            drawing.lineStyle(1.0, myGui.lineColor, myGui.lineOpacity);
-
-            if (pts.length >= 4) {
-                for (var i = 0; i < pts.length / 2; i++) {
-                    if (i == 0) {
-                        drawing.moveTo(pts[0], pts[1]);
-                    } else {
-                        drawing.lineTo(pts[i * 2], pts[i * 2 + 1]);
-                    }
-                }
-
-            }
-
-
+            // 不显示用户画线轨迹
+            
             // Fade out old images to halfway
             for (var i = 0; i < sprites.length; i++) {
                 if (sprites[i].alpha >= 0.5) {
                     sprites[i].alpha -= myGui.imgFadeOutSpeed;
                 }
             }
-
 
             // Fade out background images
             for (var i = 0; i < backgroundImages.length; i++) {
@@ -1975,31 +1961,42 @@ function animate() {
             circleOffsetY = animatingCircle.y - drawnCircle.y;
             circleScaleRatio = animatingCircle.r / drawnCircle.r;
 
-            if (pts.length >= 4)
-                for (var i = 0; i < pts.length / 2; i++) {
-
-                    // this is how we could scale and change the offset of the line.  zooming in to center seems good
-                    // image can do the same thing since it's also set by drawn circle (above the end of mouse released)
-
-                    var x = pts[i * 2] - drawnCircle.x;
-                    var y = pts[i * 2 + 1] - drawnCircle.y;
-
-                    x *= circleScaleRatio;
-                    y *= circleScaleRatio;
-
-                    x += drawnCircle.x;
-                    y += drawnCircle.y;
-
-                    x += circleOffsetX;
-                    y += circleOffsetY;
-
-
+            // 显示匹配的线段而不是用户画的线
+            if (results && results.length > 0 && dataobj[results[0].i] && infoobj[results[0].i]) {
+                var matchedLine = dataobj[results[0].i];
+                var matchedRadius = infoobj[results[0].i][3]; // 获取datainfo中的缩放半径参数
+                
+                // 应用旋转角度
+                var rotatedLine = matchedLine.slice(0);
+                rotate(rotatedLine, angleMatch);
+                
+                // 获取当前图片的缩放比例
+                var currentImageScale = 0;
+                if (sprites.length > 0) {
+                    var lastSprite = sprites[sprites.length - 1];
+                    currentImageScale = lastSprite.scale.x;
+                }
+                
+                // 计算线段的缩放比例 - 使用更大的缩放因子
+                var lineScaleFactor = 0.8; // 进一步增大缩放因子，使线段更加明显
+                
+                // 应用缩放和位移
+                for (var i = 0; i < rotatedLine.length / 2; i++) {
+                    // 应用缩放 - 使用更小的缩放因子
+                    var x = rotatedLine[i * 2] * lineScaleFactor;
+                    var y = rotatedLine[i * 2 + 1] * lineScaleFactor;
+                    
+                    // 调整位置
+                    x += animatingCircle.x;
+                    y += animatingCircle.y;
+                    
                     if (i == 0) {
                         drawing.moveTo(x, y);
                     } else {
                         drawing.lineTo(x, y);
                     }
                 }
+            }
 
             // Draw enclosing circle
             if (myGui.showEnclosingCircle) {

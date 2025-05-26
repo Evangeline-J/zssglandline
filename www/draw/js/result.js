@@ -157,7 +157,22 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.style.backgroundImage = `url('/img/full/${imageId}.jpg')`;
     
     // 显示坐标信息
-    document.getElementById('image-coords').textContent = coordinates || "8°41'S 115°16'E";
+    const coordsElement = document.getElementById('image-coords');
+    const coordsText = coordinates || "8°41'S 115°16'E";
+    // 根据逗号切分坐标
+    if (coordsText.includes(',')) {
+        const coordParts = coordsText.split(',');
+        coordsElement.innerHTML = ''; // 清空原有内容
+        // 创建每个坐标部分的元素并添加
+        coordParts.forEach(part => {
+            const div = document.createElement('div');
+            div.textContent = part.trim();
+            coordsElement.appendChild(div);
+        });
+    } else {
+        // 如果没有逗号，直接显示
+        coordsElement.textContent = coordsText;
+    }
     
     // 生成二维码
     generateQRCode(imageDataUrl);

@@ -289,7 +289,7 @@ function compressImage(imgData, quality) {
  * 启动倒计时
  */
 function startCountdown() {
-    let seconds = 300;
+    let seconds = 30;
     const countdownElement = document.getElementById('countdown');
     
     const interval = setInterval(() => {

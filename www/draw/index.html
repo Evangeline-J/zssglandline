@@ -102,41 +102,6 @@
             margin-top: 0;
             margin-bottom: 0;
         }
-        
-        /* 响应式设计 */
-        @media screen and (min-width: 1025px) {
-            .logo {
-                width: 14%;
-            }
-            
-            .desc-cn {
-                font-size: 1.375vw;
-            }
-            
-            .desc-en {
-                font-size: 1.125vw;
-            }
-        }
-        
-        @media screen and (max-width: 767px) {
-            .logo {
-                width: 25%;
-                margin-left: 2%;
-            }
-            
-            #desc {
-                margin-left: 10%;
-                width: 65%;
-            }
-            
-            .desc-cn {
-                font-size: 3.375vw;
-            }
-            
-            .desc-en {
-                font-size: 2.75vw;
-            }
-        }
 
         #info {
             position: absolute;
@@ -151,34 +116,6 @@
             opacity: 0; /* 初始状态隐藏，只在匹配到图片后显示 */
         }
         
-        /* 响应式布局 - info部分 */
-        @media screen and (min-width: 1200px) {
-            #info {
-                top: 82.54%;
-                left: 5.25%;
-            }
-        }
-        
-        @media screen and (max-width: 1024px) {
-            #info {
-                top: 87%;
-                left: 5%;
-            }
-        }
-        
-        @media screen and (max-width: 767px) {
-            #info {
-                top: 85%;
-                left: 4%;
-                font-size: 14px;
-            }
-            #info .location {
-                font-size: 20px;
-            }
-            #info .tag {
-                font-size: 16px;
-            }
-        }
         #info .location {
             font-size: 2.2vw;
             font-family: 'Alibaba PuHuiTi', sans-serif;
@@ -274,6 +211,11 @@
 
         /* 响应式设计 - 标准PC端 */
         @media (min-width: 1366px) and (max-width: 1599px) {
+            #info {
+                top: 80.54%;
+                left: 4.25%;
+            }
+
             .btn-cn {
                 font-size: 2.1vw;
                 margin-bottom: 0.3vh;
@@ -284,8 +226,8 @@
             }
             
             .save-button {
-                width: 28%;
-                height: 8.5%;
+                width: 26.5%;
+                height: 9.5%;
                 top: 84%;
             }
         }

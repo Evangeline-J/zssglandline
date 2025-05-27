@@ -3,8 +3,31 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 预加载字体文件，提高加载速度 -->
+    <link rel="preload" href="/fonts/Alibaba-PuHuiTi-Regular.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="/fonts/Alibaba-PuHuiTi-Medium.ttf" as="font" type="font/ttf" crossorigin>
+    
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'Alibaba PuHuiTi';
+            src: url('/fonts/Alibaba-PuHuiTi-Regular.ttf') format('truetype'),
+                 url('/fonts/Alibaba-PuHuiTi-Regular.otf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Alibaba PuHuiTi';
+            src: url('/fonts/Alibaba-PuHuiTi-Medium.ttf') format('truetype'),
+                 url('/fonts/Alibaba-PuHuiTi-Medium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+        
         body {
             margin: 0;
             padding: 0;

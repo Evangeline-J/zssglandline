@@ -29,6 +29,10 @@
 
     <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
+    
+    <!-- 预加载字体文件，提高加载速度 -->
+    <link rel="preload" href="/fonts/Alibaba-PuHuiTi-Regular.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="/fonts/Alibaba-PuHuiTi-Medium.ttf" as="font" type="font/ttf" crossorigin>
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700" rel="stylesheet">
@@ -44,15 +48,6 @@
     <style>
     @font-face {
         font-family: 'Alibaba PuHuiTi';
-        src: url('/fonts/Alibaba-PuHuiTi-Light.ttf') format('truetype'),
-             url('/fonts/Alibaba-PuHuiTi-Light.otf') format('opentype');
-        font-weight: 300;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: 'Alibaba PuHuiTi';
         src: url('/fonts/Alibaba-PuHuiTi-Regular.ttf') format('truetype'),
              url('/fonts/Alibaba-PuHuiTi-Regular.otf') format('opentype');
         font-weight: 400;
@@ -65,24 +60,6 @@
         src: url('/fonts/Alibaba-PuHuiTi-Medium.ttf') format('truetype'),
              url('/fonts/Alibaba-PuHuiTi-Medium.otf') format('opentype');
         font-weight: 500;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: 'Alibaba PuHuiTi';
-        src: url('/fonts/Alibaba-PuHuiTi-Bold.ttf') format('truetype'),
-             url('/fonts/Alibaba-PuHuiTi-Bold.otf') format('opentype');
-        font-weight: 600;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: 'Alibaba PuHuiTi';
-        src: url('/fonts/Alibaba-PuHuiTi-Heavy.ttf') format('truetype'),
-             url('/fonts/Alibaba-PuHuiTi-Heavy.otf') format('opentype');
-        font-weight: 700;
         font-style: normal;
         font-display: swap;
     }

@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
     generateQRCode(imageDataUrl);
     
     // 启动倒计时
-    startCountdown();
+    // startCountdown();
     
     // 记录事件（如果GA可用）
     if (typeof ga === 'function') {
@@ -433,52 +433,52 @@ function cleanupVideoResources() {
 /**
  * 启动倒计时
  */
-function startCountdown() {
-    let seconds = 30;
-    const countdownElement = document.getElementById('countdown');
+// function startCountdown() {
+//     let seconds = 30;
+//     const countdownElement = document.getElementById('countdown');
     
-    const interval = setInterval(() => {
-        seconds--;
-        countdownElement.textContent = seconds + 'S';
+//     const interval = setInterval(() => {
+//         seconds--;
+//         countdownElement.textContent = seconds + 'S';
         
-        // 视频资源清理相关代码已注释
-        /*
-        // 当倒计时还剩5秒时，开始清理视频资源，提前准备跳转
-        if (seconds === 5) {
-            cleanupVideoResources();
-        }
-        */
+//         // 视频资源清理相关代码已注释
+//         /*
+//         // 当倒计时还剩5秒时，开始清理视频资源，提前准备跳转
+//         if (seconds === 5) {
+//             cleanupVideoResources();
+//         }
+//         */
         
-        if (seconds <= 0) {
-            clearInterval(interval);
+//         if (seconds <= 0) {
+//             clearInterval(interval);
             
-            // 视频资源清理相关代码已注释
-            /*
-            // 清理视频资源
-            cleanupVideoResources();
-            */
+//             // 视频资源清理相关代码已注释
+//             /*
+//             // 清理视频资源
+//             cleanupVideoResources();
+//             */
             
-            // 延迟跳转，确保资源清理完成
-            setTimeout(() => {
-                window.location.href = '../index.html'; // 倒计时结束后返回首页
-            }, 50); // 增加延迟时间，确保资源清理完成
-        }
-    }, 1000);
+//             // 延迟跳转，确保资源清理完成
+//             setTimeout(() => {
+//                 window.location.href = '../index.html'; // 倒计时结束后返回首页
+//             }, 50); // 增加延迟时间，确保资源清理完成
+//         }
+//     }, 1000);
     
-    // 点击返回按钮时清除倒计时并立即跳转
-    document.querySelector('.back-button').addEventListener('click', function(e) {
-        e.preventDefault(); // 阻止默认链接行为
-        clearInterval(interval); // 清除倒计时
+//     // 点击返回按钮时清除倒计时并立即跳转
+//     document.querySelector('.back-button').addEventListener('click', function(e) {
+//         e.preventDefault(); // 阻止默认链接行为
+//         clearInterval(interval); // 清除倒计时
         
-        // 视频资源清理相关代码已注释
-        /*
-        // 清理视频资源
-        cleanupVideoResources();
-        */
+//         // 视频资源清理相关代码已注释
+//         /*
+//         // 清理视频资源
+//         cleanupVideoResources();
+//         */
         
-        // 延迟很短的时间后跳转，给清除倒计时和资源清理操作留出时间
-        setTimeout(() => {
-            window.location.href = '../index.html';
-        }, 50);
-    });
-}
+//         // 延迟很短的时间后跳转，给清除倒计时和资源清理操作留出时间
+//         setTimeout(() => {
+//             window.location.href = '../index.html';
+//         }, 50);
+//     });
+// }

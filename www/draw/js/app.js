@@ -829,6 +829,7 @@ var drawingAlpha = 1.0;
 var drawingAlphaTarget = 1.0;
 var pulseComplete = false;
 var pulseTimer;
+var saveButtonTimer; // 添加一个变量来存储保存按钮的定时器ID
 
 function returnPathForCircle(simpleArray) {
     canvasPoints = [];
@@ -1079,11 +1080,16 @@ stage.mousedown = stage.touchstart = function(moveData) {
         document.getElementById('instruction-text').style.display = 'block';
     }
     
-    // 隐藏保存图片按钮
+    // 隐藏保存图片按钮并清除定时器
     var saveButton = document.getElementById('button-save');
     if (saveButton) {
         saveButton.style.visibility = 'hidden';
         saveButton.style.opacity = '0';
+    }
+    
+    // 清除保存按钮的定时器，防止在画线过程中显示保存按钮
+    if (saveButtonTimer) {
+        clearTimeout(saveButtonTimer);
     }
 
     pts = [];
@@ -1895,7 +1901,7 @@ function animate() {
                 metadataTargetOpacity = 1;
                 
                 // 延迟2秒后显示保存按钮
-                setTimeout(function() {
+                saveButtonTimer = setTimeout(function() {
                     var saveButton = document.getElementById('button-save');
                     saveButton.style.visibility = 'visible';
                     saveButton.style.opacity = '1';

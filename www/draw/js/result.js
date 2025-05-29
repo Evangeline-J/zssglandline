@@ -370,6 +370,28 @@ function compressImage(imgData, quality) {
 }
 
 /**
+ * 清理视频相关资源
+ */
+function cleanupVideoResources() {
+    // 移除所有可能正在加载的视频元素
+    const videoElements = document.querySelectorAll('video');
+    videoElements.forEach(video => {
+        if (video && video.parentNode) {
+            video.pause();
+            video.removeAttribute('src');
+            video.load();
+            video.parentNode.removeChild(video);
+        }
+    });
+    
+    // 停止任何可能正在进行的视频预加载
+    // 这里我们不能直接停止已经启动的Promise，但可以标记一个状态
+    window._stopVideoProcessing = true;
+    
+    console.log('视频资源清理完成');
+}
+
+/**
  * 启动倒计时
  */
 function startCountdown() {
@@ -380,9 +402,21 @@ function startCountdown() {
         seconds--;
         countdownElement.textContent = seconds + 'S';
         
+        // 当倒计时还剩5秒时，开始清理视频资源，提前准备跳转
+        if (seconds === 5) {
+            cleanupVideoResources();
+        }
+        
         if (seconds <= 0) {
             clearInterval(interval);
-            window.location.href = '../index.html'; // 倒计时结束后返回首页
+            
+            // 清理视频资源
+            cleanupVideoResources();
+            
+            // 延迟跳转，确保资源清理完成
+            setTimeout(() => {
+                window.location.href = '../index.html'; // 倒计时结束后返回首页
+            }, 50); // 增加延迟时间，确保资源清理完成
         }
     }, 1000);
     
@@ -391,9 +425,12 @@ function startCountdown() {
         e.preventDefault(); // 阻止默认链接行为
         clearInterval(interval); // 清除倒计时
         
-        // 延迟很短的时间后跳转，给清除倒计时等操作留出时间
+        // 清理视频资源
+        cleanupVideoResources();
+        
+        // 延迟很短的时间后跳转，给清除倒计时和资源清理操作留出时间
         setTimeout(() => {
             window.location.href = '../index.html';
-        }, 10);
+        }, 50);
     });
 }

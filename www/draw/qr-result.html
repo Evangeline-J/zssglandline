@@ -98,7 +98,7 @@
                     ctx.drawImage(logoImg, logoX, logoY, logoWidth, logoHeight);
                     
                     // 绘制坐标文本
-                    ctx.font = `bold ${canvas.width * 0.05}px 'Alibaba PuHuiTi', sans-serif`;
+                    ctx.font = `bold ${canvas.width * 0.04}px 'Alibaba PuHuiTi', sans-serif`;
                     ctx.fillStyle = 'white';
                     ctx.textAlign = 'right';
                     ctx.textBaseline = 'bottom';
@@ -108,11 +108,26 @@
                     ctx.shadowOffsetY = 1;
                     
                     // 计算文本位置（右下角）
-                    const textX = canvas.width - canvas.width * 0.05; // 右边距为canvas宽度的5%
-                    const textY = canvas.height - canvas.height * 0.05; // 底部边距为canvas高度的5%
+                    const textX = canvas.width - canvas.width * 0.05; // 右边距为canvas宽度的20%，与result.html中的right: 20%对应
+                    const baseTextY = canvas.height - canvas.height * 0.05; // 底部边距为canvas高度的5%
                     
-                    // 绘制坐标文本
-                    ctx.fillText(coordsText, textX, textY);
+                    // 检查坐标文本是否包含逗号
+                    if (coordsText.includes(',')) {
+                        // 根据逗号分割坐标
+                        const coordParts = coordsText.split(',');
+                        // 计算行高
+                        const lineHeight = canvas.height * 0.06;
+                        
+                        // 从下往上绘制每一行文本
+                        for (let i = coordParts.length - 1; i >= 0; i--) {
+                            const part = coordParts[i].trim();
+                            const textY = baseTextY - (coordParts.length - 1 - i) * lineHeight;
+                            ctx.fillText(part, textX, textY);
+                        }
+                    } else {
+                        // 如果没有逗号，直接显示
+                        ctx.fillText(coordsText, textX, baseTextY);
+                    }
                     
                     // 将canvas转换为图片URL
                     const composedImageUrl = canvas.toDataURL('image/jpeg', 0.9);

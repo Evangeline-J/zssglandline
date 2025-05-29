@@ -237,6 +237,7 @@
         }
         
         /* 视频浮窗样式 */
+        /* 
         .video-popup {
             position: absolute;
             top: 3vh;
@@ -248,8 +249,8 @@
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             z-index: 10;
-            display: none; /* 初始状态不显示 */
-            opacity: 1; /* 移除初始透明度设置 */
+            display: none; 
+            opacity: 1; 
         }
 
         .video-thumbnail {
@@ -297,7 +298,6 @@
             font-size: 1.6vw;
         }
 
-        /* 视频描述容器样式 */
         .video-description-container {
             display: flex;
             align-items: center;
@@ -313,20 +313,21 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             margin: 0;
-            flex: 1; /* 让描述文本占据剩余空间 */
+            flex: 1;
         }
 
         .view-more {
             color: rgba(195, 195, 195, 1);
             text-decoration: none;
             font-size: 1.1vw;
-            white-space: nowrap; /* 防止文本换行 */
-            margin-left: 10px; /* 添加左侧间距 */
+            white-space: nowrap;
+            margin-left: 10px;
         }
 
         .view-more:hover {
             text-decoration: none;
         }
+        */
     </style>
 </head>
 <body>
@@ -338,7 +339,7 @@
         </div>
         
         <!-- 视频浮窗 -->
-        <div class="video-popup">
+        <!-- <div class="video-popup">
             <div class="video-thumbnail">
                 <img id="video-preview" class="video-preview" alt="视频预览">
                 <div class="play-icon"></div>
@@ -350,7 +351,7 @@
                     <a href="javascript:void(0);" class="view-more">查看更多</a>
                 </div>
             </div>
-        </div>
+        </div> -->
         
         <a href="../index.html" class="back-button">
             <span class="back-zh">返回首页</span>

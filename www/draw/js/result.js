@@ -9,6 +9,8 @@
  * 5. 预加载视频缩略图，提高性能
  */
 
+// 视频相关函数已注释
+/*
 // 随机选择视频函数
 function getRandomVideo() {
     // 视频文件列表
@@ -22,12 +24,14 @@ function getRandomVideo() {
     const randomIndex = Math.floor(Math.random() * videos.length);
     return videos[randomIndex];
 }
+*/
 
 /**
  * 从视频中提取第一帧作为缩略图
  * @param {string} videoSrc - 视频文件路径
  * @returns {Promise<string>} 缩略图的Data URL
  */
+/*
 function extractVideoThumbnail(videoSrc) {
     return new Promise((resolve, reject) => {
         // 创建一个隐藏的video元素
@@ -92,11 +96,13 @@ function extractVideoThumbnail(videoSrc) {
         }
     });
 }
+*/
 
 /**
  * 预加载所有视频缩略图
  * @returns {Promise<Array>} 包含所有视频缩略图信息的Promise
  */
+/*
 function preloadAllVideoThumbnails() {
     // 视频文件列表
     const videos = [
@@ -125,8 +131,10 @@ function preloadAllVideoThumbnails() {
     // 等待所有缩略图加载完成
     return Promise.all(thumbnailPromises);
 }
+*/
 
 // 设置视频浮窗
+/*
 function setupVideoPopup() {
     // 视频文件列表
     const videos = [
@@ -207,6 +215,7 @@ function setupVideoPopup() {
             });
     }
 }
+*/
 
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
@@ -260,6 +269,8 @@ document.addEventListener('DOMContentLoaded', function() {
         ga('send', 'event', 'Draw', 'view_saved_image');
     }
     
+    // 视频相关功能已注释
+    /*
     // 设置视频浮窗
     setupVideoPopup();
     
@@ -271,6 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('预加载视频缩略图过程中出错:', error);
         });
+    */
 });
 
 /**
@@ -372,6 +384,7 @@ function compressImage(imgData, quality) {
 /**
  * 清理视频相关资源
  */
+/*
 function cleanupVideoResources() {
     // 移除所有可能正在加载的视频元素
     const videoElements = document.querySelectorAll('video');
@@ -390,6 +403,7 @@ function cleanupVideoResources() {
     
     console.log('视频资源清理完成');
 }
+*/
 
 /**
  * 启动倒计时
@@ -402,16 +416,22 @@ function startCountdown() {
         seconds--;
         countdownElement.textContent = seconds + 'S';
         
+        // 视频资源清理相关代码已注释
+        /*
         // 当倒计时还剩5秒时，开始清理视频资源，提前准备跳转
         if (seconds === 5) {
             cleanupVideoResources();
         }
+        */
         
         if (seconds <= 0) {
             clearInterval(interval);
             
+            // 视频资源清理相关代码已注释
+            /*
             // 清理视频资源
             cleanupVideoResources();
+            */
             
             // 延迟跳转，确保资源清理完成
             setTimeout(() => {
@@ -425,8 +445,11 @@ function startCountdown() {
         e.preventDefault(); // 阻止默认链接行为
         clearInterval(interval); // 清除倒计时
         
+        // 视频资源清理相关代码已注释
+        /*
         // 清理视频资源
         cleanupVideoResources();
+        */
         
         // 延迟很短的时间后跳转，给清除倒计时和资源清理操作留出时间
         setTimeout(() => {

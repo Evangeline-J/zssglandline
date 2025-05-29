@@ -66,6 +66,17 @@
             opacity: 0; /* 初始透明度为0 */
             animation: fadeIn 1s ease-in forwards; /* 应用淡入动画 */
         }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0; /* 初始宽度为0，将通过JS动态设置 */
+            height: 100%;
+            background: linear-gradient(0deg, rgba(44, 44, 44, 0.5) 0%, rgba(0, 0, 0, 0.5) 8.17%, rgba(0, 0, 0, 0.5) 15%, rgba(0, 0, 0, 0.15) 28.52%, rgba(0, 0, 0, 0) 34.93%, rgba(0, 0, 0, 0) 100%);
+            pointer-events: none;
+            z-index: 2; /* 确保蒙版在图片上方，但在logo和坐标下方 */
+        }
         
         .matched-image {
             max-width: 100%;
@@ -334,6 +345,7 @@
     <div class="result-container">
         <div class="image-container">
             <img id="matched-image" class="matched-image" alt="Matched Coastline">
+            <div class="image-overlay"></div> <!-- 新增蒙版元素 -->
             <img src="../img/home/blue_up_logo.png" class="image-logo" alt="Logo">
             <div id="image-coords" class="image-coords"></div>
         </div>

@@ -240,6 +240,31 @@ document.addEventListener('DOMContentLoaded', function() {
     const imageId = localStorage.getItem('imageId') || '';
     document.body.style.backgroundImage = `url('/img/full/${imageId}.jpg')`;
     
+    // 图片加载完成后，调整蒙版大小和位置
+    matchedImage.onload = function() {
+        adjustOverlay();
+        
+        // 添加窗口大小改变事件监听，确保响应式调整
+        window.addEventListener('resize', adjustOverlay);
+    };
+    
+    // 调整蒙版函数
+    function adjustOverlay() {
+        const matchedImage = document.getElementById('matched-image');
+        const overlay = document.querySelector('.image-overlay');
+        
+        // 获取图片的实际显示尺寸和位置
+        const rect = matchedImage.getBoundingClientRect();
+        
+        // 设置蒙版的尺寸和位置
+        overlay.style.width = rect.width + 'px';
+        overlay.style.height = rect.height + 'px';
+        overlay.style.left = (rect.left - overlay.parentElement.getBoundingClientRect().left) + 'px';
+        overlay.style.top = (rect.top - overlay.parentElement.getBoundingClientRect().top) + 'px';
+        
+        console.log('蒙版已调整为图片大小:', rect.width, 'x', rect.height);
+    }
+    
     // 显示坐标信息
     const coordsElement = document.getElementById('image-coords');
     const coordsText = coordinates || "";

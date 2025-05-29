@@ -83,6 +83,18 @@
                 // 绘制主图片
                 ctx.drawImage(mainImg, 0, 0, canvas.width, canvas.height);
                 
+                // 添加渐变蒙版
+                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradient.addColorStop(0, 'rgba(0, 0, 0, 0)'); // 顶部 - 对应 100%
+                gradient.addColorStop(0.6507, 'rgba(0, 0, 0, 0)'); // 对应 34.93%
+                gradient.addColorStop(0.7148, 'rgba(0, 0, 0, 0.15)'); // 对应 28.52%
+                gradient.addColorStop(0.85, 'rgba(0, 0, 0, 0.5)'); // 对应 15%
+                gradient.addColorStop(0.9183, 'rgba(0, 0, 0, 0.5)'); // 对应 8.17%
+                gradient.addColorStop(1, 'rgba(44, 44, 44, 0.5)'); // 底部 - 对应 0%
+                
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
                 // 加载logo图片
                 const logoImg = new Image();
                 logoImg.crossOrigin = 'anonymous';

@@ -6,6 +6,7 @@
  * 2. 显示图片和位置信息
  * 3. 生成二维码
  * 4. 实现倒计时功能
+ * 5. 预加载视频缩略图，提高性能
  */
 
 // 随机选择视频函数
@@ -33,7 +34,7 @@ function extractVideoThumbnail(videoSrc) {
         const video = document.createElement('video');
         video.style.display = 'none';
         video.crossOrigin = 'anonymous'; // 允许跨域加载视频
-        video.muted = false; // 静音
+        video.muted = true; // 静音，避免浏览器对非静音视频的自动播放限制
         video.playsInline = true; // 内联播放
         
         // 监听视频数据加载完成事件
@@ -92,45 +93,119 @@ function extractVideoThumbnail(videoSrc) {
     });
 }
 
+/**
+ * 预加载所有视频缩略图
+ * @returns {Promise<Array>} 包含所有视频缩略图信息的Promise
+ */
+function preloadAllVideoThumbnails() {
+    // 视频文件列表
+    const videos = [
+        '../video/2024_End_of_Year_Video.mov',
+        '../video/Pan_Jin.mov',
+        '../video/System03_Extraction_Hauling.mp4'
+    ];
+    
+    console.log('开始预加载所有视频缩略图...');
+    
+    // 创建一个Promise数组，每个Promise负责加载一个视频的缩略图
+    const thumbnailPromises = videos.map((videoSrc, index) => {
+        return extractVideoThumbnail(videoSrc)
+            .then(thumbnailUrl => {
+                // 将缩略图存储在localStorage中
+                localStorage.setItem(`videoThumbnail_${index}`, thumbnailUrl);
+                console.log(`视频 ${videoSrc} 缩略图预加载成功`);
+                return { index, videoSrc, thumbnailUrl };
+            })
+            .catch(error => {
+                console.error(`视频 ${videoSrc} 缩略图提取失败:`, error);
+                return { index, videoSrc, error };
+            });
+    });
+    
+    // 等待所有缩略图加载完成
+    return Promise.all(thumbnailPromises);
+}
+
 // 设置视频浮窗
 function setupVideoPopup() {
-    // 随机选择一个视频
-    const selectedVideo = getRandomVideo();
+    // 视频文件列表
+    const videos = [
+        '../video/2024_End_of_Year_Video.mov',
+        '../video/Pan_Jin.mov',
+        '../video/System03_Extraction_Hauling.mp4'
+    ];
+    
+    // 随机选择一个视频索引
+    const randomIndex = Math.floor(Math.random() * videos.length);
+    const selectedVideo = videos[randomIndex];
     
     // 存储选中的视频路径到localStorage
     localStorage.setItem('selectedVideo', selectedVideo);
     
-    // 从视频中提取第一帧作为预览图
-    extractVideoThumbnail(selectedVideo)
-        .then(thumbnailUrl => {
-            // 设置视频预览图
-            document.getElementById('video-preview').src = thumbnailUrl;
-            
-            // 视频预览图加载完成后，显示video-popup容器
-            const videoPopup = document.querySelector('.video-popup');
-            videoPopup.style.display = 'block';
-            
-            // 添加淡入效果
-            setTimeout(() => {
-                videoPopup.style.opacity = '1';
-                videoPopup.style.transition = 'opacity 1s ease-in';
-            }, 10);
-            
-            // 点击视频预览图导航到详情页
-            document.querySelector('.video-thumbnail').addEventListener('click', function() {
-                window.location.href = 'video-detail.html';
-            });
-            
-            // 点击"查看更多"导航到详情页
-            document.querySelector('.view-more').addEventListener('click', function(e) {
-                e.preventDefault();
-                window.location.href = 'video-detail.html';
-            });
-        })
-        .catch(error => {
-            console.error('提取视频缩略图失败:', error);
-            // 如果提取失败，不显示video-popup容器
+    // 从localStorage获取预加载的缩略图
+    const thumbnailUrl = localStorage.getItem(`videoThumbnail_${randomIndex}`);
+    
+    if (thumbnailUrl) {
+        console.log(`使用预加载的视频缩略图: ${selectedVideo}`);
+        
+        // 如果缩略图已预加载，直接使用
+        document.getElementById('video-preview').src = thumbnailUrl;
+        
+        // 显示video-popup容器
+        const videoPopup = document.querySelector('.video-popup');
+        videoPopup.style.display = 'block';
+        
+        // 添加淡入效果
+        setTimeout(() => {
+            videoPopup.style.opacity = '1';
+            videoPopup.style.transition = 'opacity 1s ease-in';
+        }, 10);
+        
+        // 点击视频预览图导航到详情页
+        document.querySelector('.video-thumbnail').addEventListener('click', function() {
+            window.location.href = 'video-detail.html';
         });
+        
+        // 点击"查看更多"导航到详情页
+        document.querySelector('.view-more').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'video-detail.html';
+        });
+    } else {
+        console.log(`未找到预加载的缩略图，实时提取: ${selectedVideo}`);
+        
+        // 如果缩略图未预加载，回退到原来的方法
+        extractVideoThumbnail(selectedVideo)
+            .then(thumbnailUrl => {
+                // 设置视频预览图
+                document.getElementById('video-preview').src = thumbnailUrl;
+                
+                // 视频预览图加载完成后，显示video-popup容器
+                const videoPopup = document.querySelector('.video-popup');
+                videoPopup.style.display = 'block';
+                
+                // 添加淡入效果
+                setTimeout(() => {
+                    videoPopup.style.opacity = '1';
+                    videoPopup.style.transition = 'opacity 1s ease-in';
+                }, 10);
+                
+                // 点击视频预览图导航到详情页
+                document.querySelector('.video-thumbnail').addEventListener('click', function() {
+                    window.location.href = 'video-detail.html';
+                });
+                
+                // 点击"查看更多"导航到详情页
+                document.querySelector('.view-more').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'video-detail.html';
+                });
+            })
+            .catch(error => {
+                console.error('提取视频缩略图失败:', error);
+                // 如果提取失败，不显示video-popup容器
+            });
+    }
 }
 
 // 页面加载完成后执行
@@ -187,6 +262,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 设置视频浮窗
     setupVideoPopup();
+    
+    // 在后台预加载所有视频缩略图，不阻塞其他功能
+    preloadAllVideoThumbnails()
+        .then(() => {
+            console.log('所有视频缩略图预加载完成');
+        })
+        .catch(error => {
+            console.error('预加载视频缩略图过程中出错:', error);
+        });
 });
 
 /**
@@ -302,8 +386,14 @@ function startCountdown() {
         }
     }, 1000);
     
-    // 点击返回按钮时清除倒计时
-    document.querySelector('.back-button').addEventListener('click', function() {
-        clearInterval(interval);
+    // 点击返回按钮时清除倒计时并立即跳转
+    document.querySelector('.back-button').addEventListener('click', function(e) {
+        e.preventDefault(); // 阻止默认链接行为
+        clearInterval(interval); // 清除倒计时
+        
+        // 延迟很短的时间后跳转，给清除倒计时等操作留出时间
+        setTimeout(() => {
+            window.location.href = '../index.html';
+        }, 10);
     });
 }
